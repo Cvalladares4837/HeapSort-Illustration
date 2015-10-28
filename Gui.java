@@ -37,6 +37,10 @@ public class Gui extends JFrame
         file.addSeparator();
         file.add(exit);
 
+        
+        
+        
+        
     }
     
     public void paint(Graphics g)
