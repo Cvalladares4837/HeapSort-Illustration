@@ -51,15 +51,22 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     // Node Elemenents
     private Node aNode = new Node();
    
+    // Heaps
+    private MinHeap theMinHeap; 
+    private MaxHeap theMaxHeap; 
+    
     public void init()
     // POST: Initialize the GUI
     {
-
+        // Initialize the Heaps.
+        theMinHeap = new MinHeap(); 
+        theMaxHeap = new MaxHeap(); 
+        
         initializePanels();
         initializeWidgets();
         setUpPanels();
-        addToPanels();
         addAllListeners();
+        addToPanels();
         addToGui();
         
         scaler = new ScaledPoint(31);
@@ -75,6 +82,8 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         Color nodeBackground; // nodeBackground holds the background color for the node
         Color fontColor;                               
         
+        int numberOfElements; // holds the number of nodes for a heap (max or min)
+        
         super.paint(g);
         
         
@@ -82,12 +91,14 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         nodeBackground = Color.BLACK;
         fontColor = Color.WHITE;
         
-        for(int i = 0; i < 32; i++)
+        numberOfElements = theMinHeap.getCurrentLength();
+        
+        for(int i = 0; i < numberOfElements; i++)
         {
             xOrigin = scaler.getNodeXPosition(top, i);
             yOrigin = scaler.getNodeYPosition(top, i);
             
-            nodeValue = i;
+            nodeValue = theMinHeap.getByIndex(i);
             
             drawNode(xOrigin, yOrigin, nodeDimension, nodeValue, nodeBackground,
                         fontColor, g);
@@ -259,15 +270,35 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     
     @Override
     public void itemStateChanged(ItemEvent arg0) {
-        // TODO Auto-generated method stub
+    // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void actionPerformed(ActionEvent arg0) 
+    public void actionPerformed(ActionEvent e) 
     // POST: Handles all actions performed on the GUI
     {
+        int targetValue;  // target value holds the value to be searched or
+                          //    inserted        
         
+        if (e.getSource() == insertToHeap)
+        {
+            targetValue = Integer.parseInt(valueToInsert.getText());
+            
+            theMinHeap.addValue(targetValue);
+        }
+        
+        if (e.getSource() == searchValue)
+        {
+            
+        }
+        
+        if (e.getSource() == deleteValue)
+        {
+            
+        }
+        
+        repaint();
     }
 
 }

@@ -134,6 +134,21 @@ public class Heap
     {
     }
     
+    public int getCurrentLength()
+    // POST: Will return the current length for a Heap
+    //       FCTVAL = currentLength
+    {
+        return currentLength;
+    }
+    
+    public int getByIndex(int index)
+    // PRE: index >= 0 <= currentLength
+    // POST: Will return the value of the heap at given index
+    //       FCTVAL = array[index];
+    {
+        return array[index];
+    }
+    
     public String toString()
     //Post: FCTVAL = srring version of current array, current array length, full status
     {    
