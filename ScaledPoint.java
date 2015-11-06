@@ -34,32 +34,43 @@ public class ScaledPoint extends JApplet
         this(32);
     }
     
-    public int getNodeXPosition(JPanel target, int elementNumber)
+    public int getNodeXPosition(JPanel target, int elementIndex)
     // POST: Returns the Horizontal origin for a node in the heap. based on the 
     //       element number, and the total number of elements
-    //       FCTVAL = Width *(elementNumber / (2^treeHeight)
+    //       FCTVAL = Width *(elementIndex / (2^treeHeight)
     {
-        int width;      // Holds the width of the panel
-        int position;   // Holds the pixel position of a given node element.                
-        int nodeLevel;
-        int iterator;
-        
+        int width;      // width holds the width of the panel
+        int position;   // position holds the pixel position of a given node element.                
+        int nodeLevel;  // nodeLevel holds the level in which the current element resides
+        int iterator;   // iterator holds the index of the current element in terms of
+                        //    its level.   element 5 is in level 3 and it is the
+                        //    second element of its level.        
+        int numerator;  // numerator holds the end value which the numerator will hold when it
+                        //    comes to the horizontal positioning. Numerator is an
+                        //    odd number
+
+        // Fetch the pane Width
         width = target.getWidth();
-        nodeLevel = (int) (Math.log(elementNumber)/ Math.log(2)) + 1;
-        //  iterator = elementNumber % (int) Math.pow(2.0,(nodeLevel - 1));
+        // Compute the node level log_2(elementIndex); (to avoid zero values)
+        nodeLevel = (int) (Math.log(elementIndex + 1)/ Math.log(2));
+        // Compute the node's index for its level, which is the element's index
+        //      modded with the total number of elements for a given level.
+        iterator = ((elementIndex+1) % (int) Math.pow(2, nodeLevel));
+        // THe numerator is the node's level-index, turned to an odd number
+        numerator = (iterator)*2 + 1;
                 
                 
         // Get the position as a percentage of the panel width.   This will be
         //      the element number divided by 2 to the Tree Height.
-        position = (int) (width  * elementNumber / (Math.pow(2.0,(double) nodeLevel)));
+        position = (int) (width  * numerator / (Math.pow(2.0,(double) nodeLevel + 1)));
         
         return position;
     }
     
-    public int getNodeYPosition(JPanel target, int elementNumber)
+    public int getNodeYPosition(JPanel target, int elementIndex)
     // POST: Returns the Vertical origin for a node in the heap. based on the 
     //       element number, and the total number of elements
-    //       FCTVAL = Width *(elementNumber / (2^treeHeight)
+    //       FCTVAL = Width *(elementIndex / (2^treeHeight)
     {
         int height;     // Holds the height of the panel
         int position;   // Holds the pixel position of a given node element.                
@@ -67,11 +78,11 @@ public class ScaledPoint extends JApplet
         
         height = target.getHeight();
         
-        nodeLevel = (int) (Math.log(elementNumber+1)/ Math.log(2)) + 1;
+        nodeLevel = (int) (Math.log(elementIndex + 1)/ Math.log(2));
         
         // Get the position as a percentage of the panel width.   This will be
         //      the element number divided by 2 to the Tree Height.
-        position = (int) height * (nodeLevel/ treeHeight);
+        position = (int) (height * (nodeLevel)/ (treeHeight*2));
         
         
         return position;

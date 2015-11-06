@@ -79,7 +79,7 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         super.paint(g);
         
         
-        nodeDimension = 10;
+        nodeDimension = 30;
         nodeBackground = Color.BLACK;
         fontColor = Color.WHITE;
         
