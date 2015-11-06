@@ -47,9 +47,7 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     private JTextArea feedContents;       // feedContents holds content for news feed.       
     private JScrollPane feedPane;         // feedPane holds feedContents for news feed.    
     private String feedMessage;           // message for news feed.        
-    
-    
-    
+       
     // Node Elemenents
     private Node aNode = new Node();
    
@@ -61,6 +59,7 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         initializeWidgets();
         setUpPanels();
         addToPanels();
+        addAllListeners();
         addToGui();
         
         scaler = new ScaledPoint(31);
@@ -93,6 +92,14 @@ public class GUI extends JApplet implements ActionListener, ItemListener
             drawNode(xOrigin, yOrigin, nodeDimension, nodeValue, nodeBackground,
                         fontColor, g);
         }
+    }
+    
+    public void addAllListeners()
+    {
+        insertToHeap.addActionListener(this);
+        searchValue.addActionListener(this);
+        deleteValue.addActionListener(this);
+        
     }
     
     public void addToGui()
@@ -257,8 +264,9 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     }
 
     @Override
-    public void actionPerformed(ActionEvent arg0) {
-        // TODO Auto-generated method stub
+    public void actionPerformed(ActionEvent arg0) 
+    // POST: Handles all actions performed on the GUI
+    {
         
     }
 
