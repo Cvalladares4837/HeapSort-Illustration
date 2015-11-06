@@ -52,8 +52,14 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     private Node aNode = new Node();
    
     // Heaps
-    private MinHeap theMinHeap; 
-    private MaxHeap theMaxHeap; 
+    private MinHeap theMinHeap;           // theMinHeap is a min heap
+    private MaxHeap theMaxHeap;           // theMaxHeap is a max heap
+
+    // Searching
+    private int heapSearchIndex;          // heapSearchIndex will contain 
+                                          //   the index of the search
+    private boolean searchSucceeded;      // searchSucceeded will flag if the
+                                          //   search was a success
     
     public void init()
     // POST: Initialize the GUI
@@ -61,6 +67,10 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         // Initialize the Heaps.
         theMinHeap = new MinHeap(); 
         theMaxHeap = new MaxHeap(); 
+        
+        // Initialize Flags for search
+        searchSucceeded = false;
+        heapSearchIndex = -1;
         
         initializePanels();
         initializeWidgets();
@@ -102,6 +112,23 @@ public class GUI extends JApplet implements ActionListener, ItemListener
             
             drawNode(xOrigin, yOrigin, nodeDimension, nodeValue, nodeBackground,
                         fontColor, g);
+        }
+        
+        if(searchSucceeded == true)
+        {
+            xOrigin = scaler.getNodeXPosition(top, heapSearchIndex);
+            yOrigin = scaler.getNodeYPosition(top, heapSearchIndex);
+            
+            nodeValue = theMinHeap.getByIndex(heapSearchIndex);
+            
+            nodeBackground = Color.BLUE;
+            
+            drawNode(xOrigin, yOrigin, nodeDimension, nodeValue, nodeBackground,
+                    fontColor, g);
+            
+            // Reset The flags and search indexes
+            searchSucceeded = false;
+            heapSearchIndex = -1;
         }
     }
     
@@ -290,7 +317,14 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         
         if (e.getSource() == searchValue)
         {
+            targetValue = Integer.parseInt(valueToSearch.getText());
             
+            heapSearchIndex = theMinHeap.search(targetValue);
+            
+            if(heapSearchIndex != -1)
+            {
+                searchSucceeded = true;
+            }
         }
         
         if (e.getSource() == deleteValue)
