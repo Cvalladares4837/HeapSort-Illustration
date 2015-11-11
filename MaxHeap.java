@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 //Class that deals with Max Heap
 public class MaxHeap extends Heap
 {
@@ -22,8 +24,14 @@ public class MaxHeap extends Heap
             int rightIndex;                                 //index of right child
             
             parentVal = array[i];                           //get parent value
-            rightIndex = getChildRightIndex(parentVal);     //get right index
-            leftIndex = getChildLeftIndex(parentVal);       //get left index
+            
+            //Changes//
+            //rightIndex = getChildRightIndex(parentVal);     //get right index
+            //leftIndex = getChildLeftIndex(parentVal);       //get left index
+            
+            rightIndex = getChildRightIndex(i);             //get right index
+            leftIndex = getChildLeftIndex(i);               //get left index
+            
             
             if(rightIndex >= currentLength)                 //if rightIndex over currentLength
                 rightIndex = -1;                            //set rightIndex to invalid
@@ -45,6 +53,11 @@ public class MaxHeap extends Heap
                         array[i] = rightVal;                //swap parent and child
                         array[rightIndex] = parentVal;
                         
+                        //NEW
+                        state[stateIndex] =                 //Copying board into state
+                                Arrays.copyOf(array, currentLength);
+                        stateIndex++;                       //Increase index
+                        
                         i = rightIndex;                     //right child new parent
                     }
                 }
@@ -54,6 +67,11 @@ public class MaxHeap extends Heap
                     {
                         array[i] = leftVal;                 //swap left child and parent
                         array[leftIndex] = parentVal;
+                        
+                        //NEW
+                        state[stateIndex] =                 //Copying board into state
+                                Arrays.copyOf(array, currentLength);
+                        stateIndex++;                       //Increase index
                         
                         i = leftIndex;                      //left child new parent
                     }
@@ -89,6 +107,11 @@ public class MaxHeap extends Heap
                     array[i] = leftVal;                     //Swap parent and child                   
                     array[leftIndex] = parentVal;
                     
+                    //NEW
+                    state[stateIndex] =                     //Copying board into state
+                            Arrays.copyOf(array, currentLength);
+                    stateIndex++;                           //Increase index
+                    
                     i = leftIndex;                          //Index is left child
                 }
                 else                                        //Parent greater then left child
@@ -115,10 +138,29 @@ public class MaxHeap extends Heap
         {
             int pIndex;                                     //Parent Index
             
+            
+            //NEW
+            stateIndex = 0;                                 //reset stateIndex
+            
+            //NEW
+            state[stateIndex] =                             //Copying board into state
+                    Arrays.copyOf(array, currentLength);
+            stateIndex++;                                   //Increase index
+            
+            
             array[valIndex] =                               //Swap removed value and last leaf
                     array[currentLength-1];
             
-            pIndex = getParentIndex(array[valIndex]);       //Get parent index of new spot
+            //Changes//pIndex = getParentIndex(array[valIndex]);       //Get parent index of new spot
+            
+            pIndex = getParentIndex(valIndex);              //Get parent index of new spot
+            
+            currentLength--;                                //decrement counter
+            
+            //NEW
+            state[stateIndex] =                             //Copying board into state
+                    Arrays.copyOf(array, currentLength);
+            stateIndex++;                                   //Increase index
             
             if(array[valIndex] > array[pIndex])             //Current value is greater
             {
@@ -129,8 +171,12 @@ public class MaxHeap extends Heap
                 heapifyDown(valIndex);                      //Heapify downward
             }
             
-            currentLength--;                                //decrement counter
+            
         }
+        
+        //NEW::TEST
+        for(int i = 0; i < stateIndex;i++ )
+            System.out.println(Arrays.toString(state[i]));
         
         if(currentLength < MAX_LENGTH)                      //if current is less max length
         {
@@ -152,12 +198,19 @@ public class MaxHeap extends Heap
             int pIndex;                                     //parent index
             
             val = array[i];                                 //set value        
-            pIndex = getParentIndex(val);                   //get parent index
+            
+            //Change//pIndex = getParentIndex(val);                   //get parent index
+            pIndex = getParentIndex(i);                     //get parent index
             
             if( array[pIndex] < val)                        //if parent value is smaller than child
             {
                 array[i] = array[pIndex];                   //swap parent and child          
-                array[pIndex] = val;                
+                array[pIndex] = val;              
+                
+                //NEW
+                state[stateIndex] =                         //Copying board into state
+                        Arrays.copyOf(array, currentLength);
+                stateIndex++;                               //Increase index
             }
             
             i = pIndex;                                     //parent is new child

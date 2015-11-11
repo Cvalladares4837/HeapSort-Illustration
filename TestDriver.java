@@ -50,8 +50,7 @@ public class TestDriver
         System.out.println();
         System.out.println("End of building \n");
         
-        //h.removeRoot();
-        h.removeValue(6);
+        h.removeValue(13);
         System.out.println(h);
         
         //Remove
@@ -62,22 +61,24 @@ public class TestDriver
         //System.out.println("rChild: " + h.array[h.getChildRightIndex(9)]);
         */
         
+        
+        
         System.out.println("Min Heap");
         MinHeap h = new MinHeap();
         
-        h.addValue(10);
+        h.addValue(13);
         System.out.println(h);
         h.addValue(9);
         System.out.println(h);
-        h.addValue(13);
+        h.addValue(12);
         System.out.println(h);
         h.addValue(4);
         System.out.println(h);
         h.addValue(6);
         System.out.println(h);
-        h.addValue(8);
+        h.addValue(10);
         System.out.println(h);
-        h.addValue(12);
+        h.addValue(8);
         System.out.println(h);
         
         System.out.println();

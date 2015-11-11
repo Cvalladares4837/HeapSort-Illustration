@@ -1,10 +1,22 @@
+import java.util.Arrays;
+
+
+//
+//
+//      Search to delete find first occurance
+//
+//
+
+
 //Class that focus with Min Heap
 public class MinHeap extends Heap
-{
+{    
+    
     public MinHeap()
     //Post: Calling super to set up default constructor
     {
         super();                                            //default constructor
+        
     }
     
     @Override
@@ -22,8 +34,13 @@ public class MinHeap extends Heap
             int rightIndex;                                 //index of right child
             
             parentVal = array[i];                           //get parent value
-            rightIndex = getChildRightIndex(parentVal);     //get right index
-            leftIndex = getChildLeftIndex(parentVal);       //get left index
+            
+            //Changes//
+            //rightIndex = getChildRightIndex(parentVal);
+            //leftIndex = getChildLeftIndex(parentVal);
+            
+            rightIndex = getChildRightIndex(i);             //get right index
+            leftIndex = getChildLeftIndex(i);               //get left index
             
             if(rightIndex >= currentLength)                 //if rightIndex over currentLength
                 rightIndex = -1;                            //set rightIndex to invalid
@@ -45,6 +62,11 @@ public class MinHeap extends Heap
                         array[i] = rightVal;                //swap parent and child
                         array[rightIndex] = parentVal;
                         
+                        //NEW
+                        state[stateIndex] =                 //Copying board into state
+                                Arrays.copyOf(array, currentLength);
+                        stateIndex++;                       //Increase index
+                        
                         i = rightIndex;                     //right child new parent
                     }
                 }
@@ -54,6 +76,11 @@ public class MinHeap extends Heap
                     {
                         array[i] = leftVal;                 //swap left child and parent
                         array[leftIndex] = parentVal;
+                        
+                        //NEW
+                        state[stateIndex] =                 //Copying board into state
+                                Arrays.copyOf(array, currentLength);
+                        stateIndex++;                       //Increase index
                         
                         i = leftIndex;                      //left child new parent
                     }
@@ -89,6 +116,11 @@ public class MinHeap extends Heap
                     array[i] = leftVal;                     //Swap parent and child                   
                     array[leftIndex] = parentVal;
                     
+                    //NEW
+                    state[stateIndex] =                     //Copying board into state
+                            Arrays.copyOf(array, currentLength);
+                    stateIndex++;                           //Increase index
+                    
                     i = leftIndex;                          //Index is left child
                 }
                 else                                        //Parent greater then left child
@@ -115,12 +147,33 @@ public class MinHeap extends Heap
         {
             int pIndex;                                     //Parent Index
             
+            
+            //NEW
+            stateIndex = 0;                                 //reset stateIndex
+            
+            //NEW
+            state[stateIndex] =                             //Copying board into state
+                    Arrays.copyOf(array, currentLength);
+            stateIndex++;                                   //Increase index
+            
+            
             array[valIndex] =                               //Swap removed value and last leaf
                     array[currentLength-1];
             
-            pIndex = getParentIndex(array[valIndex]);       //Get parent index of new spot
+            //Changes//pIndex = getParentIndex(array[valIndex]);     //Get parent index of new spot
             
-            if(array[valIndex] > array[pIndex])             //Current value is greater
+            pIndex = getParentIndex(valIndex);              //Get parent index of new spot
+            
+            //Changes//if(array[valIndex] > array[pIndex])
+            
+            currentLength--;                                //decrement counter
+            
+            //NEW
+            state[stateIndex] =                             //Copying board into state
+                    Arrays.copyOf(array, currentLength);
+            stateIndex++;                                   //Increase index
+            
+            if(array[valIndex] >= array[pIndex])            //Current value is greater
             {
                 heapifyDown(valIndex);                      //Heapify downward
             }
@@ -129,8 +182,12 @@ public class MinHeap extends Heap
                 heapifyUp(valIndex);                        //Heapify value upward
             }
             
-            currentLength--;                                //decrement counter
+            //currentLength--;                                //decrement counter
         }
+        
+        //NEW::TEST
+        for(int i = 0; i < stateIndex;i++ )
+            System.out.println(Arrays.toString(state[i]));
         
         if(currentLength < MAX_LENGTH)                      //if current is less max length
         {
@@ -145,20 +202,33 @@ public class MinHeap extends Heap
     {
         int i;                                              //Index variable
         i = index;                                          //Index of where added
-        
+                
         while(i != 0)                                       //Loop up to root
         {
             int val;                                        //Value of last element
             int pIndex;                                     //parent index
             
-            val = array[i];                                 //set value        
-            pIndex = getParentIndex(val);                   //get parent index
+            val = array[i];                                 //set value   
+                      
+            //Changes//pIndex = getParentIndex(val);                 //get parent index
+            
+            pIndex = getParentIndex(i);                     //get parent index  
+            
+            //System.out.println("pIndex " + pIndex);
+            
             
             if( array[pIndex] > val)                        //if child value is less than parent
             {
                 array[i] = array[pIndex];                   //swap parent and child          
-                array[pIndex] = val;                
-            }
+                array[pIndex] = val;
+                
+                //NEW
+                state[stateIndex] =                         //Copying board into state
+                        Arrays.copyOf(array, currentLength);
+                stateIndex++;                               //Increase index
+                
+              
+            }          
             
             i = pIndex;                                     //parent is new child
             
