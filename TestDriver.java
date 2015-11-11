@@ -66,20 +66,27 @@ public class TestDriver
         System.out.println("Min Heap");
         MinHeap h = new MinHeap();
         
-        h.addValue(13);
+        h.addValue(20);
         System.out.println(h);
-        h.addValue(9);
+        h.addValue(10);
         System.out.println(h);
-        h.addValue(12);
+        h.addValue(0);
         System.out.println(h);
         h.addValue(4);
         System.out.println(h);
+        
         h.addValue(6);
         System.out.println(h);
         h.addValue(10);
         System.out.println(h);
         h.addValue(8);
         System.out.println(h);
+        
+        int[][] n = h.getState();
+        int i = h.getStateIndex();
+        
+        for(int j = 0; j < i; j++)
+            System.out.println(n[j].length + " " + Arrays.toString(n[j]));
         
         System.out.println();
         System.out.println("End of building \n");

@@ -61,8 +61,8 @@ public class Heap
             heapifyUp(currentLength-1);             //sort elements in array
             
             //NEW : TESTING
-            for(int i = 0; i < stateIndex;i++ )
-                System.out.println(Arrays.toString(state[i]));
+            //for(int i = 0; i < stateIndex;i++ )
+                //System.out.println(Arrays.toString(state[i]));
             
         }
         
