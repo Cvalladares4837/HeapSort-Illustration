@@ -450,29 +450,42 @@ public class Gui extends JApplet implements ActionListener, ItemListener
                           						 //    inserted         
         checkFramPosition();
         
-        if (e.getSource() == insertToHeap) 		//when user presses insert To Heap button 
+        if (e.getSource() == searchValue)
         {
-            targetValue = Integer.parseInt(valueToInsert.getText());
-            
-            theMinHeap.addValue(targetValue);
-            enableDelete = true;    			//Whenever we add a value, enable the delete
-                                    			//   button
-            
-            currFrame = 0;          			//Reset the current frame
-        }
-        
-        if (e.getSource() == searchValue)		//when user presses Search value button 
-        {
-            targetValue = Integer.parseInt(valueToSearch.getText());
-            
-            heapSearchIndex = theMinHeap.search(targetValue);
-            
-            if(heapSearchIndex != -1)
+            try               // Try to insert a value as long as the user inputs a number
             {
-                searchSucceeded = true;
+                targetValue = Integer.parseInt(valueToSearch.getText());
+                
+                heapSearchIndex = theMinHeap.search(targetValue);
+                
+                if(heapSearchIndex != -1)       // If the heapsearch does not return -1
+                { 
+                    searchSucceeded = true;     // Then the search succeeded.  Set the flag 
+                }
+                
+                currFrame = 0;                              //Reset the current frame
             }
             
-            currFrame = 0;                       		//Reset the current frame
+            catch(Exception ex)// On failure, prompt the user to type in a value
+            {
+                JOptionPane.showMessageDialog(null, "Please enter a value to search.");  
+            }
+        }
+        
+        if (e.getSource() == deleteValue)
+        {
+            
+            theMinHeap.removeRoot();                    
+            currFrame = 0;                              //Reset the current frame
+            
+            numFrames = theMinHeap.getStateIndex();
+            
+            if (animateFrames[numFrames-1].length == 0)   //If there are no nodes to 
+            {
+                enableDelete = false;                   //Do not allow delete to be enables
+                deleteValue.setEnabled(false);          //Disable delete
+            }
+            
         }
         
         if (e.getSource() == deleteValue)				//when user presses delete root button 
