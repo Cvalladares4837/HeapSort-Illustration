@@ -9,7 +9,7 @@ import java.util.Arrays;
 //Parent Class for the heap
 public class Heap
 {
-    protected static final int MAX_LENGTH = 64;     //Max length the array can be
+    protected static final int MAX_LENGTH = 63;     //Max length the array can be
     protected static final int MAX_ROW = 15;
     protected static int[] array;                   //Array to hold the values
     protected int currentLength;                    //Length of the current array
