@@ -175,6 +175,10 @@ public class GUI extends JApplet implements ActionListener, ItemListener
             heapSearchIndex = -1;
         }
         
+        theMessage = theMinHeap.actionsUpTo(currFrame, numFrames);
+        feedContents.setText(""); 
+        feedContents.setText(theMessage); 
+        
         checkFramPosition();
     }
     
@@ -247,7 +251,7 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         //Left Side                                                         
         insertToHeap = new JButton("Insert To Heap");          
         searchValue = new JButton ("Search Value");
-        deleteValue = new JButton("Delete Value");
+        deleteValue = new JButton("Delete Root");
         nextStep = new JButton("Step Ahead>"); 
         prevStep = new JButton("<Step Back");  
         lastFrame = new JButton("Last Step"); 
@@ -483,11 +487,7 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         {
             currFrame = numFrames - 1;
             checkFramPosition();
-        }
-        
-        theMessage = theMinHeap.actionLog.printUpTo(currFrame, numFrames);
-        feedContents.setText(""); 
-        feedContents.setText(theMessage); 
+        }        
         
         repaint();
     }

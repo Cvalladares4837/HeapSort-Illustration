@@ -19,6 +19,7 @@ public class Heap
     protected int[][] state;                        //Array holding intermediate state changes
     protected int stateIndex;                       //Max rows in state
     
+    public logMessage actionLog;
     
     public Heap()
     //Post: Default constructor that will initialize values
@@ -29,6 +30,8 @@ public class Heap
         //NEW
         state = new int[MAX_ROW][MAX_LENGTH];       //Initializing state
         stateIndex = 0;                             //Initialize state index
+        
+        actionLog = new logMessage();
  
     }
     
@@ -58,11 +61,15 @@ public class Heap
                     Arrays.copyOf(array, currentLength);
             stateIndex++;                           //Increase index
             
+            actionLog.feedInsert(number);           //update Log for insert
+            
             heapifyUp(currentLength-1);             //sort elements in array
             
             //NEW : TESTING
             for(int i = 0; i < stateIndex;i++ )
                 System.out.println(Arrays.toString(state[i]));
+            
+
             
         }
         
@@ -82,6 +89,8 @@ public class Heap
         state[stateIndex] =                         //Copying board into state
                 Arrays.copyOf(array, currentLength);
         stateIndex++;                               //Increase index
+        
+        actionLog.feedDelete(array[0]);             //update Log for delete
         
         array[0] = array[currentLength-1];          //Last leaf becomes root
         currentLength--;                            //Decrease length
@@ -249,6 +258,15 @@ public class Heap
     //Pre: FCTVAl = stateIndex which represents max rows in state
     {
         return stateIndex;                       //Returning state index       
+    }
+    
+    public String actionsUpTo(int currFrame, int numFrames)
+    //   PRE:  currFrame <= numFrames
+    //         numFrames = the number of steps the last iteration generated
+    //   POST: FCTVAL = returns a string that contains all the steps since app start
+    //         up to steps Total - (numSteps - 1) + stepNumber;
+    {
+        return actionLog.printUpTo(currFrame, numFrames);
     }
     
     public String toString()

@@ -59,6 +59,7 @@ public class MinHeap extends Heap
                 {
                     if(rightVal <= parentVal)                //if right value less then parent
                     {
+                        actionLog.feedSwap(rightIndex,rightVal,i,parentVal);
                         array[i] = rightVal;                //swap parent and child
                         array[rightIndex] = parentVal;
                         
@@ -74,6 +75,7 @@ public class MinHeap extends Heap
                 {
                     if(leftVal <= parentVal)                 //left value less then parent
                     {
+                        actionLog.feedSwap(leftIndex,leftVal,i,parentVal);
                         array[i] = leftVal;                 //swap left child and parent
                         array[leftIndex] = parentVal;
                         
@@ -95,7 +97,7 @@ public class MinHeap extends Heap
                 
                 if(leftVal <= parentVal)                     //Left child less then parent
                 {
-                                        
+                    actionLog.feedSwap(leftIndex,leftVal,i,parentVal);                    
                     array[i] = leftVal;                     //Swap parent and child                   
                     array[leftIndex] = parentVal;
                     
@@ -139,7 +141,7 @@ public class MinHeap extends Heap
                     Arrays.copyOf(array, currentLength);
             stateIndex++;                                   //Increase index
             
-            
+            actionLog.feedDelete(array[valIndex]);
             array[valIndex] =                               //Swap removed value and last leaf
                     array[currentLength-1];
             
@@ -202,6 +204,7 @@ public class MinHeap extends Heap
             
             if( array[pIndex] > val)                        //if child value is less than parent
             {
+                actionLog.feedSwap(i,val,pIndex,pIndex); 
                 array[i] = array[pIndex];                   //swap parent and child          
                 array[pIndex] = val;
                 
