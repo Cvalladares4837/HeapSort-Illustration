@@ -1,28 +1,33 @@
+//
+// Programmer:  Joe Kallarackel, Fayaz Khan, Jaydeep Patel, Christian Valladares
+// Assignment:  Project 3 - Heap Illustration
+// Date:        11/12/2015
+// Description: This is the Heap class. This class is meant to handle heap operation
+//              Like adding, removing, searching value in the heap.When adding and removing
+//              values from the tree it calls the heapify function which will reorganize the
+//              parent and child so things are in proper order. Also checks if the tree is
+//              full.        
+// 
+
 import java.util.Arrays;
-
-/*
- *          Might want to add a method that we call that returns an error message
- * 
- */
-
 
 //Parent Class for the heap
 public class Heap
 {
     protected static final int MAX_LENGTH = 63;     //Max length the array can be
-    protected static final int MAX_ROW = 15;
+    protected static final int MAX_ROW = 15;        //Max Rows for state
     protected static int[] array;                   //Array to hold the values
     protected int currentLength;                    //Length of the current array
     protected boolean isFull;                       //Boolean if array full
     
-    //NEW
+    
     protected int[][] state;                        //Array holding intermediate state changes
     protected int stateIndex;                       //Max rows in state
     
-    public logMessage actionLog;
+    public logMessage actionLog;                    //Contains info regarding actions in heap
     
     public Heap()
-    //Post: Default constructor that will initialize values
+    //  Post: Default constructor that will initialize values
     {
         currentLength = 0;                          //Default current value
         array = new int[MAX_LENGTH];                //New array with max size
@@ -31,12 +36,12 @@ public class Heap
         state = new int[MAX_ROW][MAX_LENGTH];       //Initializing state
         stateIndex = 0;                             //Initialize state index
         
-        actionLog = new logMessage();
+        actionLog = new logMessage();               //Initializing logMessage
  
     }
     
     public boolean isEmpty()
-    //Post: true id array empty else    
+    //  Post: FCTVAL = true if the array is empty else false   
     {
         if(currentLength == 0 )                     //current length is zero
             return true;                            //empty 
@@ -45,32 +50,26 @@ public class Heap
     }
     
     public void addValue(int number)
-    //Pre:  number is a valid number within bounds of integer
-    //Post: Adds a value into the heap array     
+    //  Pre:  number is a valid number within bounds of integer
+    //  Post: Adds a value into the heap array and heapifies     
     {
         if(!isFull)                                 //if not full
         {
-            //New
+            
             stateIndex = 0;                         //reset stateIndex
             
             array[currentLength] = number;          //add number into array
             currentLength++;                        //increase current
             
-            //NEW
+            
             state[stateIndex] =                     //Coping board into state
-                    Arrays.copyOf(array, currentLength);
+                Arrays.copyOf(array, currentLength);
             stateIndex++;                           //Increase index
             
             actionLog.feedInsert(number);           //update Log for insert
             
             heapifyUp(currentLength-1);             //sort elements in array
-            
-            //NEW : TESTING
-            for(int i = 0; i < stateIndex;i++ )
-                System.out.println(Arrays.toString(state[i]));
-            
-
-            
+   
         }
         
         if(currentLength == MAX_LENGTH)             //if current is max length
@@ -81,13 +80,12 @@ public class Heap
     
     
     public void removeRoot()
-    //Post: Remove the top of the tree
+    //  Post: Remove the top of the tree(root)
     {
-        stateIndex = 0;                             //reaset stateIndex
+        stateIndex = 0;                             //reset stateIndex
         
-        //NEW
         state[stateIndex] =                         //Copying board into state
-                Arrays.copyOf(array, currentLength);
+              Arrays.copyOf(array, currentLength);
         stateIndex++;                               //Increase index
         
         actionLog.feedDelete(array[0]);             //update Log for delete
@@ -95,9 +93,9 @@ public class Heap
         array[0] = array[currentLength-1];          //Last leaf becomes root
         currentLength--;                            //Decrease length
         
-        //NEW
+        
         state[stateIndex] =                         //Copying board into state
-                Arrays.copyOf(array, currentLength);
+              Arrays.copyOf(array, currentLength);
         stateIndex++;                               //Increase index
 
         
@@ -110,28 +108,15 @@ public class Heap
     }
     
     public void removeValue(int value)
-    //Pre:  values is valid number on the list
-    //Post: Removes the values and adjusts the heap
+    //  Pre:  values is valid number on the list
+    //  Post: Removes the values and adjusts the heap
     {
         
     }
     
-    /* Changes
-    public int getParentIndex(int value)
-    //Pre:  Value is a number in array
-    //Post: Given a number gets the parent value's index
-    {
-        int n = search(value);                      //search for value to get index
-        
-        if(n != -1)                                 //index not -1 calculate parent index
-            return (int)Math.floor( (n-1)/2);       //return parent index 
-        
-        return -1;                                  //return default/not found
-    }*/
-    
     public int getParentIndex(int childIndex)
-    //Pre:  childIndex is an index of array within currentLength and 0
-    //Post: Given an index gets the parent value's index
+    //  Pre:  childIndex is an index of array within currentLength and 0
+    //  Post: Given an index gets the parent value's index
     {             
         
         if(childIndex != -1)                        //index not -1 calculate parent index
@@ -141,23 +126,9 @@ public class Heap
         return -1;                                  //return default/not found
     }
     
-    /* Changes
-    public int getChildLeftIndex(int value)
-    //Pre:  Value is a number in array
-    //Post: Returns the index of left child given value
-    {
-        int n = search(value);                      //search for value to get index
-        
-        if(n != -1)                                 //index not -1 calculate left child index
-            return (2*n)+1;                         
-        
-        return -1;                                  
-    }
-    */
-    
     public int getChildLeftIndex(int pIndex)
-    //Pre:  pIndex is an index of the array within 0 and currentLength
-    //Post: Returns the index of left child given value
+    //  Pre:  pIndex is an index of the array within 0 and currentLength
+    //  Post: Returns the index of left child given value
     {
         int clIndex;                                //left child index
         
@@ -174,23 +145,9 @@ public class Heap
         return -1;                                  //default return -1
     }
     
-    /* Changes
-    public int getChildRightIndex(int value)
-    //Pre:  pIndex is an index of the array within 0 and currentLength
-    //Post: Returns the index of right child given value
-    {
-        int n = search(value);                      //search for value to get index
-        
-        if(n != -1)                                 //index not -1 calculate right child index
-            return (2*n)+2;                         //return right child index
-        
-        return -1;                                  //return default/not found
-    }
-    */
-    
     public int getChildRightIndex(int pIndex)
-    //Pre:  pIndex is an index of the array within 0 and currentLength
-    //Post: Returns the index of right child given value
+    //  Pre:  pIndex is an index of the array within 0 and currentLength
+    //  Post: Returns the index of right child given value
     {
         int rcIndex;                                //right child index
         
@@ -209,8 +166,8 @@ public class Heap
     }
     
     public int search(int value)
-    //Pre:  values being search in within the tree
-    //Post: returns the index of value
+    //  Pre:  value is an int currently in the heap
+    //  Post: FCTVAL = index, where index is the location of found index
     {
         for(int i = 0; i < currentLength;i++)      //loop through array
         {
@@ -222,42 +179,42 @@ public class Heap
     }
     
     public void heapifyDown(int index)
-    //Pre:  Index must be between 0 and currentLength
-    //Post: Sorts the elements in the array for removing
+    //  Pre:  Index must be between 0 and currentLength
+    //  Post: Sorts the elements in the array for removing
     {
     }
     
     public void heapifyUp(int index)
-    //Pre:  Index must be between 0 and currentLength
-    //Post: Sorts the elements in array
+    //  Pre:  Index must be between 0 and currentLength
+    //  Post: Sorts the elements in array
     {
     }
     
     public int getCurrentLength()
-    // POST: Will return the current length for a Heap
+    //  POST: Will return the current length for a Heap
     //       FCTVAL = currentLength
     {
-        return currentLength;
+        return currentLength;                      //Returning current length
     }
     
     public int getByIndex(int index)
-    // PRE: index >= 0 <= currentLength
-    // POST: Will return the value of the heap at given index
+    //  PRE: index >= 0 <= currentLength
+    //  POST: Will return the value of the heap at given index
     //       FCTVAL = array[index];
     {
-        return array[index];
+        return array[index];                       //Returning returning value with index
     }
     
     public int[][] getState()
-    //Pre: FCTVAL = state array hold transitions
+    //  Pre: FCTVAL = state array hold transitions
     {
-        return state;                            //Returning state
+        return state;                              //Returning state
     }
     
     public int getStateIndex()
-    //Pre: FCTVAl = stateIndex which represents max rows in state
+    //  Pre: FCTVAl = stateIndex which represents max rows in state
     {
-        return stateIndex;                       //Returning state index       
+        return stateIndex;                         //Returning state index       
     }
     
     public String actionsUpTo(int currFrame, int numFrames)
@@ -270,7 +227,7 @@ public class Heap
     }
     
     public String toString()
-    //Post: FCTVAL = srring version of current array, current array length, full status
+    //   Post: FCTVAL = string version of current array, current array length, full status
     {    
         String s;                                //String
         s= "";                                   //Initializing string
@@ -280,8 +237,8 @@ public class Heap
             s = s + array[i] + ",";              //Build string
         }
         
-        //return string of values
-        return "Current Length = " + currentLength + "\n"+ s + " FULL " + isFull;
+        return "Current Length = " +             //return string of values
+        currentLength + "\n"+ s + " FULL " + isFull;
     }
     
     
