@@ -1,8 +1,14 @@
 //
-// Programmer:  
-// Assignment:  
-// Date:        
-// Description: 
+// Programmer:  Joe Kallarackel, Fayaz Khan, Jaydeep Patel, Christian Valladares
+// Assignment:  Project 3 - Heap Illustration
+// Date:        11/12/2015
+// Description: This is the GUI class, and it handles the buttons, and graph printing
+//              by referencing the array representation of the heap.  We design a 
+//              GUI by using nested panels, and we also implement a message log
+//              that contains all the actions performed on the heap from the beginning
+//              of the application. We build a resizable heap image by referencing
+//              the scaledPoint class.  
+//             
 //              
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,7 +22,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
 {
 
     //Layouts
-    BorderLayout base;                // The base layout for all the GUI
+    BorderLayout base;                // base is the base layout for all the GUI
     
     //Panels
     private JPanel top;               // top is the top panel of the GUI and contains
@@ -24,8 +30,8 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     private JPanel bottom;            // bottom is the bottom panel of the GUI and 
                                       //    contains controls
     
-    private JPanel bottomLeft;        // bottomLeft contains the buttons
-    private JPanel bottomRight;       // bottomRight contains the newsFeed section
+    private JPanel bottomLeft;        // bottomLeft panel contains the buttons
+    private JPanel bottomRight;       // bottomRight panel contains the newsFeed section
     
     
     //Widgets
@@ -40,9 +46,9 @@ public class Gui extends JApplet implements ActionListener, ItemListener
                                       //    in our minHeap animation
     private JButton lastFrame;        // lastFrame button will fast forward to the 
                                       //    last frame in our minHeap animation
-    private JButton deleteValue;      // deleteValue button will promt the user to 
+    private JButton deleteValue;      // deleteValue button will prompt the user to 
                                       //    delete a value (min or max depending on
-                                      //    heap.
+                                      //    heap).
     
     private JTextField valueToInsert; // valueToInsert will hold the text value to be inserted
                                       
@@ -53,14 +59,10 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     //  Right Side
     private JTextArea feedContents;       // feedContents holds content for news feed.       
     private JScrollPane feedPane;         // feedPane holds feedContents for news feed.    
-    private String feedMessage;           // message for news feed.        
-       
-    // Node Elemenents
-    private Node aNode = new Node();
+    private String feedMessage;           // feedMessage holds message for news feed.        
    
     // Heaps
     private MinHeap theMinHeap;           // theMinHeap is a min heap
-    private MaxHeap theMaxHeap;           // theMaxHeap is a max heap
 
     // Searching
     private int heapSearchIndex;          // heapSearchIndex will contain 
@@ -72,9 +74,12 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     private boolean enableDelete;
     
     // Printing
-    private int [][] animateFrames;       // frames to be animated.
-    private int numFrames;                // number of frames in the animation
-    private int currFrame;                // current frame of animation
+    private int [][] animateFrames;       // animateFrames contains frames to be animated
+                                          //    (by heapifying or unheapifying). 
+    private int numFrames;                // numFrames contains number of frames
+                                          //    in the heap animation
+    private int currFrame;                // currFrame contains current frame of
+                                          //    animation
     
     // message log
     private String theMessage;            // theMessage holds the entire log of actions
@@ -87,7 +92,6 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     	
         // Initialize the Heaps.
         theMinHeap = new MinHeap(); 
-        theMaxHeap = new MaxHeap(); 
         
         // Initialize Flags for search
         searchSucceeded = false;
@@ -239,7 +243,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         bottomLeft.add(deleteValue);
         
         // Insert the News Feed
-        bottomRight.add(feedPane);
+        bottomRight.add(feedPane, BorderLayout.CENTER);
         
         
     }
@@ -283,7 +287,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         valueToSearch = new JTextField (); 
         
         //Right Side
-        feedContents = new JTextArea();                                  
+        feedContents = new JTextArea(5,20);                                  
         feedContents.setEditable(false);                    
         feedContents.setText(" ");                          
         
