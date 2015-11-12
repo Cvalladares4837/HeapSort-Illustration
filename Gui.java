@@ -12,7 +12,7 @@ import java.awt.event.ItemListener;
 
 import javax.swing.*;
 
-public class GUI extends JApplet implements ActionListener, ItemListener
+public class Gui extends JApplet implements ActionListener, ItemListener
 {
 
     //Layouts
@@ -82,6 +82,9 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     public void init()
     // POST: Initialize the GUI
     {
+    	
+    	displayTutorial();				 // method display's the initial tutorial for program
+    	
         // Initialize the Heaps.
         theMinHeap = new MinHeap(); 
         theMaxHeap = new MaxHeap(); 
@@ -182,6 +185,25 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         checkFramPosition();
     }
     
+    public void displayTutorial()
+    // POST: Displays a message box giving a quick tutorial of the program
+    {
+    	JOptionPane.showMessageDialog(null, "Welcome to our program! \n\nWe will be learning about "
+    			+ "Min heaps \n\nGet PUMPED!!\n\n To build a tree please type in a integer in the "
+    			+ "bottom left corner of the screen and then press Insert to Heap, repeat as "
+    			+ "desired\n\nTo search for a value in your newly made tree type an integer and then "
+    			+ "press Search value...peak a boo, I see you\n\nYou may notice the Heapify is visible"
+    			+ " after inserting a few values.\nWe have to keep our tree balanced after pressing "
+    			+ "Heapify it will attempt to balance your tree.\nPending on the value entered you "
+    			+ "may have to press a heapify a few times but pay close attention on what is "
+    			+ "happening each time\n\nAfter you Heapify, you can also UnHeapify this will "
+    			+ "reverse the animation to the previous state, repeat till desired \n\nFull "
+    			+ "Heapify does the same thing as Heapify but on steriods this will jump to "
+    			+ "balanced tree, OH YEAH!!!\n\nWant to see a lame magic trick press the Delete Root"
+    			+ "button and pay special attention to very top node.\n\nEnjoy and Behave yourself"
+    			+  ":)");
+    }
+    
     public void addAllListeners()
     {
         insertToHeap.addActionListener(this);
@@ -252,9 +274,9 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         insertToHeap = new JButton("Insert To Heap");          
         searchValue = new JButton ("Search Value");
         deleteValue = new JButton("Delete Root");
-        nextStep = new JButton("Step Ahead>"); 
-        prevStep = new JButton("<Step Back");  
-        lastFrame = new JButton("Last Step"); 
+        nextStep = new JButton("Heapify"); 
+        prevStep = new JButton("UnHeapify");  
+        lastFrame = new JButton("Full Heapify"); 
                 
         
         valueToInsert = new JTextField (); 
