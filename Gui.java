@@ -88,6 +88,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         
         searchSucceeded = false;		 // Initialize Flags for search
         heapSearchIndex = -1;
+        enableDelete = false;
         
         initializePanels();
         initializeWidgets();
@@ -99,6 +100,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         heapify.setEnabled(false);
         unHeapify.setEnabled(false);
         fullHeapify.setEnabled(false);
+        deleteValue.setEnabled(false);
         
         scaler = new ScaledPoint(31);
     }
@@ -182,7 +184,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         if(theMessage.contentEquals("1) null\n"))    // If the message contents are null
             //Handle it as a base case and print instructions
             feedContents.setText("This box will contain all the steps while \n" +
-                                 "traversing through the heap.\n\nIt will update as" +
+                                 "traversing through the heap.\n\nIt will update as " +
                                  "you heapify, unheapify, \ninsert, or delete.\n");  
         else
             feedContents.setText(theMessage); 
@@ -483,6 +485,11 @@ public class Gui extends JApplet implements ActionListener, ItemListener
                 if(heapSearchIndex != -1)       // If the heapsearch does not return -1
                 { 
                     searchSucceeded = true;     // Then the search succeeded.  Set the flag 
+                }
+                
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Value Not Found."); 
                 }
                 
                 currFrame = 0;                              //Reset the current frame
