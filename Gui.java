@@ -68,10 +68,16 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     private boolean searchSucceeded;      // searchSucceeded will flag if the
                                           //   search was a success
     
+    // Deleting
+    private boolean enableDelete;
+    
     // Printing
     private int [][] animateFrames;       // frames to be animated.
     private int numFrames;                // number of frames in the animation
     private int currFrame;                // current frame of animation
+    
+    // message log
+    private String theMessage;            // theMessage holds the entire log of actions
     
     public void init()
     // POST: Initialize the GUI
@@ -358,7 +364,8 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     {
         insertToHeap.setEnabled(true);
         searchValue.setEnabled(true);
-        deleteValue.setEnabled(true);                
+        if(enableDelete == true)            //If enableDelete flag is set to true
+            deleteValue.setEnabled(true);   //   enable the deleteValue button             
     }
     
     public void checkFramPosition()
@@ -412,8 +419,7 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     // POST: Handles all actions performed on the GUI
     {
         int targetValue;  // target value holds the value to be searched or
-                          //    inserted        
-        
+                          //    inserted         
         checkFramPosition();
         
         if (e.getSource() == insertToHeap)
@@ -421,6 +427,8 @@ public class GUI extends JApplet implements ActionListener, ItemListener
             targetValue = Integer.parseInt(valueToInsert.getText());
             
             theMinHeap.addValue(targetValue);
+            enableDelete = true;    //Whenever we add a value, enable the delete
+                                    //   button
             
             currFrame = 0;                              //Reset the current frame
         }
@@ -441,8 +449,18 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         
         if (e.getSource() == deleteValue)
         {
+            
             theMinHeap.removeRoot();                    
             currFrame = 0;                              //Reset the current frame
+            
+            numFrames = theMinHeap.getStateIndex();
+            
+            if (animateFrames[numFrames-1].length == 0)   //If there are no nodes to 
+            {
+                enableDelete = false;                   //Do not allow delete to be enables
+                deleteValue.setEnabled(false);          //Disable delete
+            }
+            
         }
         
         if (e.getSource() == nextStep)
@@ -466,6 +484,11 @@ public class GUI extends JApplet implements ActionListener, ItemListener
             currFrame = numFrames - 1;
             checkFramPosition();
         }
+        
+        theMessage = theMinHeap.actionLog.printUpTo(currFrame, numFrames);
+        feedContents.setText(""); 
+        feedContents.setText(theMessage); 
+        
         repaint();
     }
 

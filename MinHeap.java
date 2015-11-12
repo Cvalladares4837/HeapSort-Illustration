@@ -72,7 +72,7 @@ public class MinHeap extends Heap
                 }
                 else                                        //left greater then right value
                 {
-                    if(leftVal < parentVal)                 //left value less then parent
+                    if(leftVal <= parentVal)                 //left value less then parent
                     {
                         array[i] = leftVal;                 //swap left child and parent
                         array[leftIndex] = parentVal;
@@ -86,31 +86,14 @@ public class MinHeap extends Heap
                     }
                 }
                 
-            }
-            
-            /*
-            else if(rightIndex != -1)                       //No left index
-            {
-                int rightVal;                               //Right child value
-                rightVal= array[rightIndex];
-                
-                if(rightVal > parentVal)
-                {
-                    array[i] = rightVal;
-                    array[rightIndex] = parentVal;
-                    i = rightIndex;
-                }
-                else 
-                    i = -1;
-            }
-            */
+            }            
             
             else if(leftIndex != -1)                        //No right child
             {
                 int leftVal;                                //Left child value
                 leftVal= array[leftIndex];                  //Get value of left child
                 
-                if(leftVal < parentVal)                     //Left child less then parent
+                if(leftVal <= parentVal)                     //Left child less then parent
                 {
                                         
                     array[i] = leftVal;                     //Swap parent and child                   
