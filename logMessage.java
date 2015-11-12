@@ -1,9 +1,9 @@
-//
-// Programmer:  Chrstian Valladares
-// Assignment:  Project 3 -- Heap Illustration
-// Date:        11/11/2015
-// Description: This is a class that will handle all the messages 
-//  
+// Programmer:  Team 16: Christian Valladares, Joe Kallarackel, Fayaz Khan, Jaydeep Patel
+// Assignment:  Project 3 Heap Illustration 
+// Date:        November 12, 2015
+// Description: A class that  updates the user every time a new action is performed. 
+
+
 public class logMessage 
 {
     private String completeLog[];             // A string to hold all the messages
@@ -106,9 +106,7 @@ public class logMessage
         //Generate new message
         newLine = String.format("%d in node %d replaced with %d in node %d", 
                                     eltA, eltIndexA, eltB, eltIndexB);
-        
         appendMessage(newLine);
-       
     }
     
     public void feedInsert(int eltValue)
@@ -118,13 +116,10 @@ public class logMessage
     {
         
         String newLine;             //newLine holds the new message to be appended 
-        //   to the Feed
+                                    //   to the Feed
 
-        //Generate 
-        newLine = String.format("%d added to the heap",  eltValue);
-        
+        newLine = String.format("%d added to the heap",  eltValue);  //Generate 
         appendMessage(newLine);
-        
     }
     
     public void feedDelete(int eltValue)
@@ -132,15 +127,11 @@ public class logMessage
     //   POST: will append to the news feed a message that specifies that an
     //         element has been deleted
     {
-        
         String newLine;             //newLine holds the new message to be appended 
-        //   to the Feed
+                                    //   to the Feed
 
-        //Generate 
-        newLine = String.format("%d deleted from the heap",  eltValue);
-        
+        newLine = String.format("%d deleted from the heap",  eltValue);  //Generate 
         appendMessage(newLine);
-        
     }
     
     public String printUpTo (int stepNumber, int numSteps)
@@ -154,7 +145,7 @@ public class logMessage
         int limit;              // limit holds the calculated number of steps
                                 //   requested by the user
         
-        theMessage = "";
+        theMessage = "";        // start with empty
         
         limit = numMessages - (numSteps-1) + (stepNumber);
         
@@ -163,7 +154,7 @@ public class logMessage
             theMessage = theMessage + i + ")" + completeLog[i] + "\n" ;                    
         }
         
-        return theMessage;
+        return theMessage;      // return the final string 
     }
    
 }

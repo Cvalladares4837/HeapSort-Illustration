@@ -1,22 +1,18 @@
+// Programmer:  Team 16: Christian Valladares, Joe Kallarackel, Fayaz Khan, Jaydeep Patel
+// Assignment:  Project 3 Heap Illustration 
+// Date:        November 12, 2015
+// Description: A class that works with Min Heap. This class extends the parent class Heap. heapifyDown balances
+//              the tree during node deletion. removeValue removes the value. heapifyUp balances the tree during 
+//              node addition. 
+
 import java.util.Arrays;
 
-
-//
-//
-//      Search to delete find first occurance
-//
-//
-
-
-//Class that focus with Min Heap
 public class MinHeap extends Heap
 {    
-    
     public MinHeap()
     //Post: Calling super to set up default constructor
     {
         super();                                            //default constructor
-        
     }
     
     @Override
@@ -34,11 +30,7 @@ public class MinHeap extends Heap
             int rightIndex;                                 //index of right child
             
             parentVal = array[i];                           //get parent value
-            
-            //Changes//
-            //rightIndex = getChildRightIndex(parentVal);
-            //leftIndex = getChildLeftIndex(parentVal);
-            
+           
             rightIndex = getChildRightIndex(i);             //get right index
             leftIndex = getChildLeftIndex(i);               //get left index
             
@@ -55,15 +47,14 @@ public class MinHeap extends Heap
                 rightVal= array[rightIndex];                //get right value
                 leftVal = array[leftIndex];                 //get left value
                 
-                if(rightVal <= leftVal)                      //if right child less then left
+                if(rightVal <= leftVal)                     //if right child less then left
                 {
-                    if(rightVal <= parentVal)                //if right value less then parent
+                    if(rightVal <= parentVal)               //if right value less then parent
                     {
                         actionLog.feedSwap(rightIndex,rightVal,i,parentVal);
                         array[i] = rightVal;                //swap parent and child
                         array[rightIndex] = parentVal;
                         
-                        //NEW
                         state[stateIndex] =                 //Copying board into state
                                 Arrays.copyOf(array, currentLength);
                         stateIndex++;                       //Increase index
@@ -73,13 +64,12 @@ public class MinHeap extends Heap
                 }
                 else                                        //left greater then right value
                 {
-                    if(leftVal <= parentVal)                 //left value less then parent
+                    if(leftVal <= parentVal)                //left value less then parent
                     {
                         actionLog.feedSwap(leftIndex,leftVal,i,parentVal);
                         array[i] = leftVal;                 //swap left child and parent
                         array[leftIndex] = parentVal;
-                        
-                        //NEW
+
                         state[stateIndex] =                 //Copying board into state
                                 Arrays.copyOf(array, currentLength);
                         stateIndex++;                       //Increase index
@@ -95,17 +85,15 @@ public class MinHeap extends Heap
                 int leftVal;                                //Left child value
                 leftVal= array[leftIndex];                  //Get value of left child
                 
-                if(leftVal <= parentVal)                     //Left child less then parent
+                if(leftVal <= parentVal)                    //Left child less then parent
                 {
                     actionLog.feedSwap(leftIndex,leftVal,i,parentVal);                    
                     array[i] = leftVal;                     //Swap parent and child                   
                     array[leftIndex] = parentVal;
                     
-                    //NEW
                     state[stateIndex] =                     //Copying board into state
                             Arrays.copyOf(array, currentLength);
                     stateIndex++;                           //Increase index
-                    
                     i = leftIndex;                          //Index is left child
                 }
                 else                                        //Parent greater then left child
@@ -115,9 +103,7 @@ public class MinHeap extends Heap
             {
                 i = -1;                                     //Break loop index
             }
-            
         }
-        
     }
     
     @Override
@@ -131,29 +117,16 @@ public class MinHeap extends Heap
         if(valIndex != -1)                                  //index valid
         {
             int pIndex;                                     //Parent Index
-            
-            
-            //NEW
             stateIndex = 0;                                 //reset stateIndex
-            
-            //NEW
             state[stateIndex] =                             //Copying board into state
                     Arrays.copyOf(array, currentLength);
             stateIndex++;                                   //Increase index
-            
             actionLog.feedDelete(array[valIndex]);
             array[valIndex] =                               //Swap removed value and last leaf
                     array[currentLength-1];
             
-            //Changes//pIndex = getParentIndex(array[valIndex]);     //Get parent index of new spot
-            
             pIndex = getParentIndex(valIndex);              //Get parent index of new spot
-            
-            //Changes//if(array[valIndex] > array[pIndex])
-            
             currentLength--;                                //decrement counter
-            
-            //NEW
             state[stateIndex] =                             //Copying board into state
                     Arrays.copyOf(array, currentLength);
             stateIndex++;                                   //Increase index
@@ -166,13 +139,7 @@ public class MinHeap extends Heap
             {
                 heapifyUp(valIndex);                        //Heapify value upward
             }
-            
-            //currentLength--;                                //decrement counter
         }
-        
-        //NEW::TEST
-        for(int i = 0; i < stateIndex;i++ )
-            System.out.println(Arrays.toString(state[i]));
         
         if(currentLength < MAX_LENGTH)                      //if current is less max length
         {
@@ -194,32 +161,20 @@ public class MinHeap extends Heap
             int pIndex;                                     //parent index
             
             val = array[i];                                 //set value   
-                      
-            //Changes//pIndex = getParentIndex(val);                 //get parent index
-            
             pIndex = getParentIndex(i);                     //get parent index  
-            
-            //System.out.println("pIndex " + pIndex);
-            
-            
+
             if( array[pIndex] > val)                        //if child value is less than parent
             {
                 actionLog.feedSwap(i,val,pIndex,pIndex); 
                 array[i] = array[pIndex];                   //swap parent and child          
                 array[pIndex] = val;
-                
-                //NEW
+
                 state[stateIndex] =                         //Copying board into state
                         Arrays.copyOf(array, currentLength);
                 stateIndex++;                               //Increase index
-                
-              
             }          
             
             i = pIndex;                                     //parent is new child
-            
         }
     } //end of method
-    
-    
 }

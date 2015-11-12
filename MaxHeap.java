@@ -1,6 +1,12 @@
+// Programmer:  Team 16: Christian Valladares, Joe Kallarackel, Fayaz Khan, Jaydeep Patel
+// Assignment:  Project 3 Heap Illustration 
+// Date:        November 12, 2015
+// Description: A class that works with Max Heap. This class extends the parent class Heap. heapifyDown balances
+//              the tree during node deletion. removeValue removes the value. heapifyUp balances the tree during 
+//              node addition. 
+
 import java.util.Arrays;
 
-//Class that deals with Max Heap
 public class MaxHeap extends Heap
 {
     public MaxHeap()
@@ -24,10 +30,6 @@ public class MaxHeap extends Heap
             int rightIndex;                                 //index of right child
             
             parentVal = array[i];                           //get parent value
-            
-            //Changes//
-            //rightIndex = getChildRightIndex(parentVal);     //get right index
-            //leftIndex = getChildLeftIndex(parentVal);       //get left index
             
             rightIndex = getChildRightIndex(i);             //get right index
             leftIndex = getChildLeftIndex(i);               //get left index
@@ -78,24 +80,6 @@ public class MaxHeap extends Heap
                 }
                 
             }
-            
-            /*
-            else if(rightIndex != -1)                       //No left index
-            {
-                int rightVal;                               //Right child value
-                rightVal= array[rightIndex];
-                
-                if(rightVal > parentVal)
-                {
-                    array[i] = rightVal;
-                    array[rightIndex] = parentVal;
-                    i = rightIndex;
-                }
-                else 
-                    i = -1;
-            }
-            */
-            
             else if(leftIndex != -1)                        //No right child
             {
                 int leftVal;                                //Left child value
@@ -103,15 +87,11 @@ public class MaxHeap extends Heap
                 
                 if(leftVal > parentVal)                     //Left child greater then parent
                 {
-                                        
                     array[i] = leftVal;                     //Swap parent and child                   
                     array[leftIndex] = parentVal;
-                    
-                    //NEW
                     state[stateIndex] =                     //Copying board into state
                             Arrays.copyOf(array, currentLength);
                     stateIndex++;                           //Increase index
-                    
                     i = leftIndex;                          //Index is left child
                 }
                 else                                        //Parent greater then left child
@@ -121,9 +101,7 @@ public class MaxHeap extends Heap
             {
                 i = -1;                                     //Break loop index
             }
-            
         }
-        
     }
     
     @Override
@@ -137,27 +115,20 @@ public class MaxHeap extends Heap
         if(valIndex != -1)                                  //index valid
         {
             int pIndex;                                     //Parent Index
-            
-            
-            //NEW
+
             stateIndex = 0;                                 //reset stateIndex
-            
-            //NEW
+
             state[stateIndex] =                             //Copying board into state
                     Arrays.copyOf(array, currentLength);
             stateIndex++;                                   //Increase index
             
-            
             array[valIndex] =                               //Swap removed value and last leaf
                     array[currentLength-1];
-            
-            //Changes//pIndex = getParentIndex(array[valIndex]);       //Get parent index of new spot
             
             pIndex = getParentIndex(valIndex);              //Get parent index of new spot
             
             currentLength--;                                //decrement counter
             
-            //NEW
             state[stateIndex] =                             //Copying board into state
                     Arrays.copyOf(array, currentLength);
             stateIndex++;                                   //Increase index
@@ -170,13 +141,7 @@ public class MaxHeap extends Heap
             {
                 heapifyDown(valIndex);                      //Heapify downward
             }
-            
-            
         }
-        
-        //NEW::TEST
-        for(int i = 0; i < stateIndex;i++ )
-            System.out.println(Arrays.toString(state[i]));
         
         if(currentLength < MAX_LENGTH)                      //if current is less max length
         {
@@ -198,23 +163,20 @@ public class MaxHeap extends Heap
             int pIndex;                                     //parent index
             
             val = array[i];                                 //set value        
-            
-            //Change//pIndex = getParentIndex(val);                   //get parent index
+
             pIndex = getParentIndex(i);                     //get parent index
             
             if( array[pIndex] < val)                        //if parent value is smaller than child
             {
                 array[i] = array[pIndex];                   //swap parent and child          
                 array[pIndex] = val;              
-                
-                //NEW
+
                 state[stateIndex] =                         //Copying board into state
                         Arrays.copyOf(array, currentLength);
                 stateIndex++;                               //Increase index
             }
             
             i = pIndex;                                     //parent is new child
-            
         }
     } //end of method
 }
