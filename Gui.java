@@ -34,9 +34,16 @@ public class GUI extends JApplet implements ActionListener, ItemListener
                                       //    insert to the heap
     private JButton searchValue;      // searchValue button will let the user search
                                       //    a value
+    private JButton nextStep;         // nextStep button will move one frame forward
+                                      //    in our minHeap animation
+    private JButton prevStep;         // prevStep button will move one frame backwards
+                                      //    in our minHeap animation
+    private JButton lastFrame;        // lastFrame button will fast forward to the 
+                                      //    last frame in our minHeap animation
     private JButton deleteValue;      // deleteValue button will promt the user to 
                                       //    delete a value (min or max depending on
                                       //    heap.
+    
     private JTextField valueToInsert; // valueToInsert will hold the text value to be inserted
                                       
     private JTextField valueToSearch; // valueToSearch will hold the value to be searched
@@ -60,6 +67,8 @@ public class GUI extends JApplet implements ActionListener, ItemListener
                                           //   the index of the search
     private boolean searchSucceeded;      // searchSucceeded will flag if the
                                           //   search was a success
+    
+    //
     
     public void init()
     // POST: Initialize the GUI
@@ -150,9 +159,10 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         insertToHeap.addActionListener(this);
         searchValue.addActionListener(this);
         deleteValue.addActionListener(this);
-        
+        nextStep.addActionListener(this);
+        prevStep.addActionListener(this);
+        lastFrame.addActionListener(this);      
     }
-    
     public void addToGui()
     // POST: Will add all widgets, layouts, and panels to the GUI
     {
@@ -171,6 +181,11 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         bottomLeft.add(valueToInsert);
         bottomLeft.add(searchValue);
         bottomLeft.add(valueToSearch);
+
+        bottomLeft.add(prevStep );
+        bottomLeft.add(nextStep );
+        bottomLeft.add(lastFrame);
+        
         bottomLeft.add(deleteValue);
         
         // Insert the News Feed
@@ -209,6 +224,10 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         insertToHeap = new JButton("Insert To Heap");          
         searchValue = new JButton ("Search Value");
         deleteValue = new JButton("Delete Value");
+        nextStep = new JButton("Step Ahead>"); 
+        prevStep = new JButton("<Step Back");  
+        lastFrame = new JButton("Last Step"); 
+                
         
         valueToInsert = new JTextField (); 
         valueToSearch = new JTextField (); 
@@ -235,7 +254,7 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         //Set the layout for all panels
         top.setLayout(new FlowLayout());
         bottom.setLayout(new GridLayout(1,2));
-        bottomLeft.setLayout(new GridLayout(5,1));
+        bottomLeft.setLayout(new GridLayout(4,2));
         bottomRight.setLayout(new BorderLayout()); 
         bottomLeft.setMinimumSize(new Dimension(600,130));
     }                                                     
@@ -345,6 +364,20 @@ public class GUI extends JApplet implements ActionListener, ItemListener
             
         }
         
+        if (e.getSource() == nextStep)
+        {
+            
+        }
+        
+        if (e.getSource() == prevStep)
+        {
+            
+        }
+        
+        if (e.getSource() == lastFrame)
+        {
+            
+        }
         repaint();
     }
 
