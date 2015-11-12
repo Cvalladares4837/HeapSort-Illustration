@@ -34,9 +34,16 @@ public class Gui extends JApplet implements ActionListener, ItemListener
                                       //    insert to the heap
     private JButton searchValue;      // searchValue button will let the user search
                                       //    a value
+    private JButton nextStep;         // nextStep button will move one frame forward
+                                      //    in our minHeap animation
+    private JButton prevStep;         // prevStep button will move one frame backwards
+                                      //    in our minHeap animation
+    private JButton lastFrame;        // lastFrame button will fast forward to the 
+                                      //    last frame in our minHeap animation
     private JButton deleteValue;      // deleteValue button will promt the user to 
                                       //    delete a value (min or max depending on
                                       //    heap.
+    
     private JTextField valueToInsert; // valueToInsert will hold the text value to be inserted
                                       
     private JTextField valueToSearch; // valueToSearch will hold the value to be searched
@@ -61,9 +68,23 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     private boolean searchSucceeded;      // searchSucceeded will flag if the
                                           //   search was a success
     
+    // Deleting
+    private boolean enableDelete;
+    
+    // Printing
+    private int [][] animateFrames;       // frames to be animated.
+    private int numFrames;                // number of frames in the animation
+    private int currFrame;                // current frame of animation
+    
+    // message log
+    private String theMessage;            // theMessage holds the entire log of actions
+    
     public void init()
     // POST: Initialize the GUI
     {
+    	
+    	displayTutorial();				 // method display's the initial tutorial for program
+    	
         // Initialize the Heaps.
         theMinHeap = new MinHeap(); 
         theMaxHeap = new MaxHeap(); 
@@ -79,6 +100,10 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         addToPanels();
         addToGui();
         
+        nextStep.setEnabled(false);
+        prevStep.setEnabled(false);
+        lastFrame.setEnabled(false);
+        
         scaler = new ScaledPoint(31);
     }
     
@@ -89,6 +114,11 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         int nodeDimension; //nodeDimension to hold a Node's square dimension
         int nodeValue;     //to Hold a Node's Value
         
+        int edgeXOrigin;
+        int edgeXEnd;
+        int edgeYOrigin;
+        int edgeYEnd;
+        
         Color nodeBackground; // nodeBackground holds the background color for the node
         Color fontColor;                               
         
@@ -97,23 +127,40 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         super.paint(g);
         
         
-        nodeDimension = 30;
+        nodeDimension = 15;
         nodeBackground = Color.BLACK;
         fontColor = Color.WHITE;
         
-        numberOfElements = theMinHeap.getCurrentLength();
+       
         
-        for(int i = 0; i < numberOfElements; i++)		 
+        animateFrames = theMinHeap.getState();      //Get all frames for animation
+        numFrames = theMinHeap.getStateIndex();     //Get number of frames index.
+
+        
+        numberOfElements = animateFrames[currFrame].length;
+        
+        if(numFrames != 0)          // If numFrames is zero (basecase) then do not
+                                    //   paint
         {
-            xOrigin = scaler.getNodeXPosition(top, i);
-            yOrigin = scaler.getNodeYPosition(top, i);
-            
-            nodeValue = theMinHeap.getByIndex(i);
-            
-            drawNode(xOrigin, yOrigin, nodeDimension, nodeValue, nodeBackground,
-                        fontColor, g);
+            for(int i = 0; i < numberOfElements; i++)
+            {
+                xOrigin = scaler.getNodeXPosition(top, i);
+                yOrigin = scaler.getNodeYPosition(top, i);
+                
+                edgeXOrigin = scaler.getEdgeXStartPosition(top, i, nodeDimension);
+                edgeXEnd = scaler.getEdgeXEndPosition(top, i, nodeDimension);
+                edgeYOrigin = scaler.getEdgeYStartPosition(top, i, nodeDimension);
+                edgeYEnd = scaler.getEdgeYEndPosition(top, i, nodeDimension);
+                
+                nodeValue = animateFrames[currFrame][i];
+                
+                drawNode(xOrigin, yOrigin, nodeDimension, nodeValue, nodeBackground,
+                            fontColor, g);
+                
+                g.setColor(Color.BLACK);
+                g.drawLine(edgeXOrigin, edgeYOrigin, edgeXEnd, edgeYEnd);
+            }
         }
-        
         if(searchSucceeded == true)
         {
             xOrigin = scaler.getNodeXPosition(top, heapSearchIndex);
@@ -130,6 +177,31 @@ public class Gui extends JApplet implements ActionListener, ItemListener
             searchSucceeded = false;
             heapSearchIndex = -1;
         }
+        
+        theMessage = theMinHeap.actionsUpTo(currFrame, numFrames);
+        feedContents.setText(""); 
+        feedContents.setText(theMessage); 
+        
+        checkFramPosition();
+    }
+    
+    public void displayTutorial()
+    // POST: Displays a message box giving a quick tutorial of the program
+    {
+    	JOptionPane.showMessageDialog(null, "Welcome to our program! \n\nWe will be learning about "
+    			+ "Min heaps \n\nGet PUMPED!!\n\n To build a tree please type in a integer in the "
+    			+ "bottom left corner of the screen and then press Insert to Heap, repeat as "
+    			+ "desired\n\nTo search for a value in your newly made tree type an integer and then "
+    			+ "press Search value...peak a boo, I see you\n\nYou may notice the Heapify is visible"
+    			+ " after inserting a few values.\nWe have to keep our tree balanced after pressing "
+    			+ "Heapify it will attempt to balance your tree.\nPending on the value entered you "
+    			+ "may have to press a heapify a few times but pay close attention on what is "
+    			+ "happening each time\n\nAfter you Heapify, you can also UnHeapify this will "
+    			+ "reverse the animation to the previous state, repeat till desired \n\nFull "
+    			+ "Heapify does the same thing as Heapify but on steriods this will jump to "
+    			+ "balanced tree, OH YEAH!!!\n\nWant to see a lame magic trick press the Delete Root"
+    			+ "button and pay special attention to very top node.\n\nEnjoy and Behave yourself"
+    			+  ":)");
     }
     
     public void addAllListeners()
@@ -137,9 +209,10 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         insertToHeap.addActionListener(this);
         searchValue.addActionListener(this);
         deleteValue.addActionListener(this);
-        
+        nextStep.addActionListener(this);
+        prevStep.addActionListener(this);
+        lastFrame.addActionListener(this);      
     }
-    
     public void addToGui()
     // POST: Will add all widgets, layouts, and panels to the GUI
     {
@@ -158,6 +231,11 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         bottomLeft.add(valueToInsert);
         bottomLeft.add(searchValue);
         bottomLeft.add(valueToSearch);
+
+        bottomLeft.add(prevStep );
+        bottomLeft.add(nextStep );
+        bottomLeft.add(lastFrame);
+        
         bottomLeft.add(deleteValue);
         
         // Insert the News Feed
@@ -195,7 +273,11 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         //Left Side                                                         
         insertToHeap = new JButton("Insert To Heap");          
         searchValue = new JButton ("Search Value");
-        deleteValue = new JButton("Delete Value");
+        deleteValue = new JButton("Delete Root");
+        nextStep = new JButton("Heapify"); 
+        prevStep = new JButton("UnHeapify");  
+        lastFrame = new JButton("Full Heapify"); 
+                
         
         valueToInsert = new JTextField (); 
         valueToSearch = new JTextField (); 
@@ -222,7 +304,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         //Set the layout for all panels
         top.setLayout(new FlowLayout());
         bottom.setLayout(new GridLayout(1,2));
-        bottomLeft.setLayout(new GridLayout(5,1));
+        bottomLeft.setLayout(new GridLayout(4,2));
         bottomRight.setLayout(new BorderLayout()); 
         bottomLeft.setMinimumSize(new Dimension(600,130));
     }                                                     
@@ -261,7 +343,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     //NOTE: draw string draws strings with origins on the bottom left corner.
     //      For this reason, the origin of the string will be calculated 
     //      accordingly.
-    numberOriginX = originX + (diceDimention/3); // Let die's number's horizontal
+    numberOriginX = originX; // Let die's number's horizontal
                                                  //   origin be placed at 1/3
                                                  //   of the die's width
     numberOriginY = originY + (diceDimention)
@@ -295,6 +377,63 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     
     }
     
+    public void disableAll()
+    // POST:  Enables all buttons 
+    {
+        insertToHeap.setEnabled(false);
+        searchValue.setEnabled(false);
+        deleteValue.setEnabled(false);                
+    }
+    
+    public void enableAll()
+    // POST:  Enable all buttons except for animation buttons
+    {
+        insertToHeap.setEnabled(true);
+        searchValue.setEnabled(true);
+        if(enableDelete == true)            //If enableDelete flag is set to true
+            deleteValue.setEnabled(true);   //   enable the deleteValue button             
+    }
+    
+    public void checkFramPosition()
+    // POST: Disable or disables buttons based on whether the current animation
+    //       frame is the last frame or not
+    {
+        
+        if (numFrames == 0 || numFrames == 1) // If there are no frames (base case)
+        {
+            enableAll();                 // enable all the buttons 
+            nextStep.setEnabled(false);  // disable the forward button
+            lastFrame.setEnabled(false); // disable the fast forward button
+            prevStep.setEnabled(false);   // enable all the move back button
+        }
+        
+        else if(currFrame == (numFrames - 1) )   // If the current frame is at last frame
+        {
+            enableAll();                 // enable all buttons
+            nextStep.setEnabled(false);  // disable the forward button
+            lastFrame.setEnabled(false); // disable the fast forward button
+            prevStep.setEnabled(true);   // enable all the move back button
+        }
+        
+
+        else if( currFrame == 0)
+        {
+            disableAll();
+            prevStep.setEnabled(false); 
+            nextStep.setEnabled(true);  
+            lastFrame.setEnabled(true); 
+        }
+        
+        else                             // If the current frame is not at last
+                                         //   frame
+        {
+            disableAll();
+            nextStep.setEnabled(true);  //disable the forward button
+            lastFrame.setEnabled(true); //disable the fast forward button
+            prevStep.setEnabled(true);   //enable all the move back button
+        }
+    }
+    
     @Override
     public void itemStateChanged(ItemEvent arg0) {
     // TODO Auto-generated method stub
@@ -306,13 +445,18 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     // POST: Handles all actions performed on the GUI
     {
         int targetValue;  // target value holds the value to be searched or
-                          //    inserted        
+                          //    inserted         
+        checkFramPosition();
         
         if (e.getSource() == insertToHeap)
         {
             targetValue = Integer.parseInt(valueToInsert.getText());
             
             theMinHeap.addValue(targetValue);
+            enableDelete = true;    //Whenever we add a value, enable the delete
+                                    //   button
+            
+            currFrame = 0;                              //Reset the current frame
         }
         
         if (e.getSource() == searchValue)
@@ -325,12 +469,47 @@ public class Gui extends JApplet implements ActionListener, ItemListener
             {
                 searchSucceeded = true;
             }
+            
+            currFrame = 0;                              //Reset the current frame
         }
         
         if (e.getSource() == deleteValue)
         {
             
+            theMinHeap.removeRoot();                    
+            currFrame = 0;                              //Reset the current frame
+            
+            numFrames = theMinHeap.getStateIndex();
+            
+            if (animateFrames[numFrames-1].length == 0)   //If there are no nodes to 
+            {
+                enableDelete = false;                   //Do not allow delete to be enables
+                deleteValue.setEnabled(false);          //Disable delete
+            }
+            
         }
+        
+        if (e.getSource() == nextStep)
+        {
+            currFrame++;
+            checkFramPosition();
+        }
+        
+        if (e.getSource() == prevStep)
+        {
+            currFrame--;           //   decrement.
+            
+            if (currFrame == -1)        // If the current frame is not at the first frame.
+                currFrame = 0;
+            
+            checkFramPosition();
+        }
+        
+        if (e.getSource() == lastFrame)
+        {
+            currFrame = numFrames - 1;
+            checkFramPosition();
+        }        
         
         repaint();
     }
