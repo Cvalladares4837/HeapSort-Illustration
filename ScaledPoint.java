@@ -34,6 +34,72 @@ public class ScaledPoint extends JApplet
         this(32);
     }
     
+    public int getEdgeXStartPosition(JPanel target, int elementIndex, int nodeWidth)
+    // PRE: target -- must be the panel that holds the tree
+    //      elementIndex -- the Index of the current Index.  Must be greater than 1
+    //      nodeWidth -- the width of the nodes for the drawing
+    // POST: will return the start value for a node's edge.  We intend to draw from
+    //          child to parent.
+    //       FCTVAL =
+    //
+    {        
+        int xStart = getNodeXPosition(target,elementIndex) + (nodeWidth/2);
+        
+        return xStart;
+    }
+    
+    public int getEdgeXEndPosition(JPanel target, int elementIndex, int nodeWidth)
+    // PRE: target -- must be the panel that holds the tree
+    //      elementIndex -- the Index of the current Index.  Must be greater than 0
+    //      nodeWidth -- the width of the nodes for the drawing
+    // POST: will return the start value for a node's edge.  We intend to draw from
+    //          child to parent.
+    //       FCTVAL =
+    //
+    {        
+        int parent;
+        int xEnd;
+        
+        parent = (int)Math.floor((elementIndex-1)/2);
+        
+        xEnd = getNodeXPosition(target,parent) + (nodeWidth/2);
+        
+        return xEnd;
+    }
+    
+    public int getEdgeYStartPosition(JPanel target, int elementIndex, int nodeWidth)
+    // PRE: target -- must be the panel that holds the tree
+    //      elementIndex -- the Index of the current Index.  Must be greater than 1
+    //      nodeWidth -- the width of the nodes for the drawing
+    // POST: will return the start value for a node's edge.  We intend to draw from
+    //          child to parent.
+    //       FCTVAL =
+    //
+    {        
+        int yStart = getNodeYPosition(target,elementIndex);
+        
+        return yStart;
+    
+    }
+    public int getEdgeYEndPosition(JPanel target, int elementIndex, int nodeWidth)
+    // PRE: target -- must be the panel that holds the tree
+    //      elementIndex -- the Index of the current Index.  Must be greater than 0
+    //      nodeWidth -- the width of the nodes for the drawing
+    // POST: will return the start value for a node's edge.  We intend to draw from
+    //          child to parent.
+    //       FCTVAL =
+    //
+    {        
+        int parent;
+        int xEnd;
+        
+        parent = (int)Math.floor((elementIndex-1)/2);
+        
+        xEnd = getNodeYPosition(target,parent) + (nodeWidth);
+        
+        return xEnd;
+    }
+    
     public int getNodeXPosition(JPanel target, int elementIndex)
     // POST: Returns the Horizontal origin for a node in the heap. based on the 
     //       element number, and the total number of elements

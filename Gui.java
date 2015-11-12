@@ -89,6 +89,11 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         int nodeDimension; //nodeDimension to hold a Node's square dimension
         int nodeValue;     //to Hold a Node's Value
         
+        int edgeXOrigin;
+        int edgeXEnd;
+        int edgeYOrigin;
+        int edgeYEnd;
+        
         Color nodeBackground; // nodeBackground holds the background color for the node
         Color fontColor;                               
         
@@ -97,7 +102,7 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         super.paint(g);
         
         
-        nodeDimension = 30;
+        nodeDimension = 20;
         nodeBackground = Color.BLACK;
         fontColor = Color.WHITE;
         
@@ -108,10 +113,18 @@ public class GUI extends JApplet implements ActionListener, ItemListener
             xOrigin = scaler.getNodeXPosition(top, i);
             yOrigin = scaler.getNodeYPosition(top, i);
             
+            edgeXOrigin = scaler.getEdgeXStartPosition(top, i, nodeDimension);
+            edgeXEnd = scaler.getEdgeXEndPosition(top, i, nodeDimension);
+            edgeYOrigin = scaler.getEdgeYStartPosition(top, i, nodeDimension);
+            edgeYEnd = scaler.getEdgeYEndPosition(top, i, nodeDimension);
+            
             nodeValue = theMinHeap.getByIndex(i);
             
             drawNode(xOrigin, yOrigin, nodeDimension, nodeValue, nodeBackground,
                         fontColor, g);
+            
+            g.setColor(Color.BLACK);
+            g.drawLine(edgeXOrigin, edgeYOrigin, edgeXEnd, edgeYEnd);
         }
         
         if(searchSucceeded == true)
@@ -251,7 +264,7 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     // Reference: http://stackoverflow.com/questions/139655/convert-pixels-to-points
     //            researched on how to convert from pixels to Points for use
     //            on fontSize.
-    fontSize = diceDimention * (72.0/96.0); // There are approximately 72 points
+    fontSize = diceDimention * (72.0/96.0) - (diceDimention * .2); // There are approximately 72 points
                                        //    in an inch, and we assume that
                                        //    our display will have 96 pixels
                                        //    per Inch.  Using Stoichometry,
@@ -261,7 +274,7 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     //NOTE: draw string draws strings with origins on the bottom left corner.
     //      For this reason, the origin of the string will be calculated 
     //      accordingly.
-    numberOriginX = originX + (diceDimention/3); // Let die's number's horizontal
+    numberOriginX = originX; // Let die's number's horizontal
                                                  //   origin be placed at 1/3
                                                  //   of the die's width
     numberOriginY = originY + (diceDimention)
