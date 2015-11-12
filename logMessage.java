@@ -19,6 +19,7 @@ public class logMessage
                                               //   that the log can hold.
     
     public logMessage()
+    //  POST: default constructor for logMessage
     {
         completeLog = new String[10];         //Allocate 10 elements for the string array.        
         maxMessages = 10;                     //Keep track of the number of elements allocated        
