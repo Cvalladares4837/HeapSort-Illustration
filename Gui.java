@@ -510,13 +510,13 @@ public class Gui extends JApplet implements ActionListener, ItemListener
             
         }
         
-        if (e.getSource() == nextStep)
+        if (e.getSource() == heapify)
         {
             currFrame++;
             checkFramPosition();
         }
         
-        if (e.getSource() == prevStep)
+        if (e.getSource() == unHeapify)
         {
             currFrame--;           //   decrement.
             
@@ -526,7 +526,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
             checkFramPosition();
         }
         
-        if (e.getSource() == lastFrame)
+        if (e.getSource() == fullHeapify)
         {
             currFrame = numFrames - 1;
             checkFramPosition();
