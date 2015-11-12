@@ -178,7 +178,9 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         
         theMessage = theMinHeap.actionsUpTo(currFrame, numFrames);
         feedContents.setText(""); 
-        if(theMessage.contentEquals("0)null\n"))
+       
+        if(theMessage.contentEquals("1) null\n"))    // If the message contents are null
+            //Handle it as a base case and print instructions
             feedContents.setText("This box will contain all the steps while \n" +
                                  "traversing through the heap.\n\nIt will update as" +
                                  "you heapify, unheapify, \ninsert, or delete.\n");  

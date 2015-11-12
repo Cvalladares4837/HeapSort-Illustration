@@ -151,7 +151,7 @@ public class logMessage
         
         for(int i = 0; i < limit; i++)
         {
-            theMessage = theMessage + i + ")" + completeLog[i] + "\n" ;                    
+            theMessage = theMessage + (i+1) + ") " + completeLog[i] + "\n" ;                    
         }
         
         return theMessage;      // return the final string 
