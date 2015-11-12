@@ -68,7 +68,10 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     private boolean searchSucceeded;      // searchSucceeded will flag if the
                                           //   search was a success
     
-    //
+    // Printing
+    private int [][] animateFrames;       // frames to be animated.
+    private int numFrames;                // number of frames in the animation
+    private int currFrame;                // current frame of animation
     
     public void init()
     // POST: Initialize the GUI
@@ -87,6 +90,10 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         addAllListeners();
         addToPanels();
         addToGui();
+        
+        nextStep.setEnabled(false);
+        prevStep.setEnabled(false);
+        lastFrame.setEnabled(false);
         
         scaler = new ScaledPoint(31);
     }
@@ -111,31 +118,40 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         super.paint(g);
         
         
-        nodeDimension = 20;
+        nodeDimension = 15;
         nodeBackground = Color.BLACK;
         fontColor = Color.WHITE;
         
-        numberOfElements = theMinHeap.getCurrentLength();
+       
         
-        for(int i = 0; i < numberOfElements; i++)
+        animateFrames = theMinHeap.getState();      //Get all frames for animation
+        numFrames = theMinHeap.getStateIndex();     //Get number of frames index.
+
+        
+        numberOfElements = animateFrames[currFrame].length;
+        
+        if(numFrames != 0)          // If numFrames is zero (basecase) then do not
+                                    //   paint
         {
-            xOrigin = scaler.getNodeXPosition(top, i);
-            yOrigin = scaler.getNodeYPosition(top, i);
-            
-            edgeXOrigin = scaler.getEdgeXStartPosition(top, i, nodeDimension);
-            edgeXEnd = scaler.getEdgeXEndPosition(top, i, nodeDimension);
-            edgeYOrigin = scaler.getEdgeYStartPosition(top, i, nodeDimension);
-            edgeYEnd = scaler.getEdgeYEndPosition(top, i, nodeDimension);
-            
-            nodeValue = theMinHeap.getByIndex(i);
-            
-            drawNode(xOrigin, yOrigin, nodeDimension, nodeValue, nodeBackground,
-                        fontColor, g);
-            
-            g.setColor(Color.BLACK);
-            g.drawLine(edgeXOrigin, edgeYOrigin, edgeXEnd, edgeYEnd);
+            for(int i = 0; i < numberOfElements; i++)
+            {
+                xOrigin = scaler.getNodeXPosition(top, i);
+                yOrigin = scaler.getNodeYPosition(top, i);
+                
+                edgeXOrigin = scaler.getEdgeXStartPosition(top, i, nodeDimension);
+                edgeXEnd = scaler.getEdgeXEndPosition(top, i, nodeDimension);
+                edgeYOrigin = scaler.getEdgeYStartPosition(top, i, nodeDimension);
+                edgeYEnd = scaler.getEdgeYEndPosition(top, i, nodeDimension);
+                
+                nodeValue = animateFrames[currFrame][i];
+                
+                drawNode(xOrigin, yOrigin, nodeDimension, nodeValue, nodeBackground,
+                            fontColor, g);
+                
+                g.setColor(Color.BLACK);
+                g.drawLine(edgeXOrigin, edgeYOrigin, edgeXEnd, edgeYEnd);
+            }
         }
-        
         if(searchSucceeded == true)
         {
             xOrigin = scaler.getNodeXPosition(top, heapSearchIndex);
@@ -152,6 +168,8 @@ public class GUI extends JApplet implements ActionListener, ItemListener
             searchSucceeded = false;
             heapSearchIndex = -1;
         }
+        
+        checkFramPosition();
     }
     
     public void addAllListeners()
@@ -283,7 +301,7 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     // Reference: http://stackoverflow.com/questions/139655/convert-pixels-to-points
     //            researched on how to convert from pixels to Points for use
     //            on fontSize.
-    fontSize = diceDimention * (72.0/96.0) - (diceDimention * .2); // There are approximately 72 points
+    fontSize = diceDimention * (72.0/96.0); // There are approximately 72 points
                                        //    in an inch, and we assume that
                                        //    our display will have 96 pixels
                                        //    per Inch.  Using Stoichometry,
@@ -327,6 +345,62 @@ public class GUI extends JApplet implements ActionListener, ItemListener
     
     }
     
+    public void disableAll()
+    // POST:  Enables all buttons 
+    {
+        insertToHeap.setEnabled(false);
+        searchValue.setEnabled(false);
+        deleteValue.setEnabled(false);                
+    }
+    
+    public void enableAll()
+    // POST:  Enable all buttons except for animation buttons
+    {
+        insertToHeap.setEnabled(true);
+        searchValue.setEnabled(true);
+        deleteValue.setEnabled(true);                
+    }
+    
+    public void checkFramPosition()
+    // POST: Disable or disables buttons based on whether the current animation
+    //       frame is the last frame or not
+    {
+        
+        if (numFrames == 0 || numFrames == 1) // If there are no frames (base case)
+        {
+            enableAll();                 // enable all the buttons 
+            nextStep.setEnabled(false);  // disable the forward button
+            lastFrame.setEnabled(false); // disable the fast forward button
+            prevStep.setEnabled(false);   // enable all the move back button
+        }
+        
+        else if(currFrame == (numFrames - 1) )   // If the current frame is at last frame
+        {
+            enableAll();                 // enable all buttons
+            nextStep.setEnabled(false);  // disable the forward button
+            lastFrame.setEnabled(false); // disable the fast forward button
+            prevStep.setEnabled(true);   // enable all the move back button
+        }
+        
+
+        else if( currFrame == 0)
+        {
+            disableAll();
+            prevStep.setEnabled(false); 
+            nextStep.setEnabled(true);  
+            lastFrame.setEnabled(true); 
+        }
+        
+        else                             // If the current frame is not at last
+                                         //   frame
+        {
+            disableAll();
+            nextStep.setEnabled(true);  //disable the forward button
+            lastFrame.setEnabled(true); //disable the fast forward button
+            prevStep.setEnabled(true);   //enable all the move back button
+        }
+    }
+    
     @Override
     public void itemStateChanged(ItemEvent arg0) {
     // TODO Auto-generated method stub
@@ -340,11 +414,15 @@ public class GUI extends JApplet implements ActionListener, ItemListener
         int targetValue;  // target value holds the value to be searched or
                           //    inserted        
         
+        checkFramPosition();
+        
         if (e.getSource() == insertToHeap)
         {
             targetValue = Integer.parseInt(valueToInsert.getText());
             
             theMinHeap.addValue(targetValue);
+            
+            currFrame = 0;                              //Reset the current frame
         }
         
         if (e.getSource() == searchValue)
@@ -357,26 +435,36 @@ public class GUI extends JApplet implements ActionListener, ItemListener
             {
                 searchSucceeded = true;
             }
+            
+            currFrame = 0;                              //Reset the current frame
         }
         
         if (e.getSource() == deleteValue)
         {
-            
+            theMinHeap.removeRoot();                    
+            currFrame = 0;                              //Reset the current frame
         }
         
         if (e.getSource() == nextStep)
         {
-            
+            currFrame++;
+            checkFramPosition();
         }
         
         if (e.getSource() == prevStep)
         {
+            currFrame--;           //   decrement.
             
+            if (currFrame == -1)        // If the current frame is not at the first frame.
+                currFrame = 0;
+            
+            checkFramPosition();
         }
         
         if (e.getSource() == lastFrame)
         {
-            
+            currFrame = numFrames - 1;
+            checkFramPosition();
         }
         repaint();
     }

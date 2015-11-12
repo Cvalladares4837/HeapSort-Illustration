@@ -55,9 +55,9 @@ public class MinHeap extends Heap
                 rightVal= array[rightIndex];                //get right value
                 leftVal = array[leftIndex];                 //get left value
                 
-                if(rightVal < leftVal)                      //if right child less then left
+                if(rightVal <= leftVal)                      //if right child less then left
                 {
-                    if(rightVal < parentVal)                //if right value less then parent
+                    if(rightVal <= parentVal)                //if right value less then parent
                     {
                         array[i] = rightVal;                //swap parent and child
                         array[rightIndex] = parentVal;

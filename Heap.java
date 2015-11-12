@@ -17,7 +17,7 @@ public class Heap
     
     //NEW
     protected int[][] state;                        //Array holding intermediate state changes
-    int stateIndex;                                 //Max rows in state
+    protected int stateIndex;                       //Max rows in state
     
     
     public Heap()
