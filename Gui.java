@@ -18,7 +18,7 @@ import java.awt.event.ItemListener;
 
 import javax.swing.*;
 
-public class Gui extends JApplet implements ActionListener, ItemListener
+public class GUI extends JApplet implements ActionListener, ItemListener
 {
 
     //Layouts
