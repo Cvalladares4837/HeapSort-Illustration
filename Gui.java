@@ -87,7 +87,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     public void init()
     // POST: Initialize the GUI
     {
-    	
+        setSize(600,400);                // start the program to 600 by 400
     	displayTutorial();				 // method display's the initial tutorial for program
     	
         // Initialize the Heaps.
