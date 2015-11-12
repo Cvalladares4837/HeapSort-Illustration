@@ -81,7 +81,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     {
     	
     	displayTutorial();				 // method display's the initial tutorial for program
-    	
+        setSize(600,400);                // start the program to 600 by 400
         
         theMinHeap = new MinHeap(); 	 // Initialize the Heaps.
         
@@ -178,7 +178,12 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         
         theMessage = theMinHeap.actionsUpTo(currFrame, numFrames);
         feedContents.setText(""); 
-        feedContents.setText(theMessage); 
+        if(theMessage.contentEquals("0)null\n"))
+            feedContents.setText("This box will contain all the steps while \n" +
+                                 "traversing through the heap.\n\nIt will update as" +
+                                 "you heapify, unheapify, \ninsert, or delete.\n");  
+        else
+            feedContents.setText(theMessage); 
         
         checkFramPosition();
     }
@@ -305,17 +310,17 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         bottomLeft.setMinimumSize(new Dimension(600,130));
     }                                                     
     
-    public void drawNode(int originX, int originY, int diceDimention, int diceFace,
-            Color diceBackground, Color diceNumberColor, Graphics g)
-    // PRE:  originX >=0, originY >= 0, and diceDimention >= 0 with all of them
-    //       having pixels as units. The diceFace >0 and diceFace <= 6. 
-    //       diceBackground and diceNumberColor objects must be initialized, 
+    public void drawNode(int originX, int originY, int nodeDimension, int nodeFace,
+            Color nodeBackground, Color nodeNumberColor, Graphics g)
+    // PRE:  originX >=0, originY >= 0, and nodeDimension >= 0 with all of them
+    //       having pixels as units. The nodeFace >0 and nodeFace <= 6. 
+    //       nodeBackground and nodeNumberColor objects must be initialized, 
     //       to different colors from each other. The Graphics object g is 
     //       necessary to paint into the JApplet. The best results will occur
     //       on a 96 DPI screen.
-    // POST: Draws a dice with the specified colors in the JApplet.  The cube's 
+    // POST: Draws a node with the specified colors in the JApplet.  The node's
     //       upper right corner will be located at the coordinates (originX, originY).
-    //       diceDimention will be the dice's length and width. 
+    //       nodeDimension will be the dice's length and width. 
     //       The dice will have different background and font colors
     {
     int numberOriginX;      // Horizontal Origin for the Die's Number
@@ -325,38 +330,51 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     double fontSize;        // To hold the size of the Font (UNIT: Points)
     
     Font faceFont;          // To store the font to be used on the die's face        
-   
-    fontSize = diceDimention * (72.0/96.0); // There are approximately 72 points
+    
+    // Reference: http://stackoverflow.com/questions/139655/convert-pixels-to-points
+    //            researched on how to convert from pixels to Points for use
+    //            on fontSize.
+    fontSize = nodeDimension * (72.0/96.0); // There are approximately 72 points
                                        //    in an inch, and we assume that
                                        //    our display will have 96 pixels
                                        //    per Inch.  Using Stoichometry,
                                        //    we convert the number buffer
                                        //    from pixels to points
     
-    numberOriginX = originX; 					 // Let die's number's horizontal
+    //NOTE: draw string draws strings with origins on the bottom left corner.
+    //      For this reason, the origin of the string will be calculated 
+    //      accordingly.
+    numberOriginX = originX; // Let die's number's horizontal
                                                  //   origin be placed at 1/3
                                                  //   of the die's width
+    numberOriginY = originY + (nodeDimension)
+                       - (nodeDimension/4); // Let the die's dimension be
+                                            //   placed at 3/4 of the die's
+                                            //   height.  Calculated like 
+                                            //   this to avoid dealing with
+                                            //   doubles
     
-    numberOriginY = originY + (diceDimention) - (diceDimention/4); // Let the die's dimension be
-                                            					   //   placed at 3/4 of the die's
-                                            					   //   height.  Calculated like 
-                                            					   //   this to avoid dealing with
-                                            					   //   doubles
-    
-    faceFont = new Font("SansSerif",Font.BOLD,(int) fontSize);     // Create a new font object
+    faceFont = new Font("SansSerif", 
+                   Font.BOLD,
+                   (int) fontSize);         // Create a new font object
                                             
     
+    // Draw the Dice's background.
+    g.setColor(nodeBackground);                                // Set the color for 
+                                                               //   the background
     
-    g.setColor(diceBackground);                    			    // Set the color for the background
-                                                             
-    g.fillRect(originX, originY,diceDimention, diceDimention); // Draw the background     
+    g.fillRect(originX, originY,nodeDimension, nodeDimension); // Draw the background     
     
-    g.setColor(diceNumberColor);                  			   // Set the color for the die's font
-                                                             
-    g.setFont(faceFont);                          			   // Update the font                                                     
+    // Draw the Dice's face Number
+    g.setColor(nodeNumberColor);                               // Set the color for 
+                                                               //   the die's font
     
-
-    g.drawString("" + diceFace, numberOriginX, numberOriginY); // Draw the Number in  the die's face                                                      
+    g.setFont(faceFont);                                       // Update the font                                                     
+    
+    // NOTE: In order to cast the nodeFace from an integer to a string, I concatenated
+    //       an empty string to the nodeFace integer
+    g.drawString("" + nodeFace, numberOriginX, numberOriginY); // Draw the Number in 
+                                                               //   the die's face
     
     }
     
