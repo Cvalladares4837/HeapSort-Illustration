@@ -448,9 +448,29 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     public void actionPerformed(ActionEvent e) 
     // POST: Handles all actions performed on the GUI
     {
-        int targetValue;  						 // target value holds the value to be searched or
-                          						 //    inserted         
+        int targetValue;  // target value holds the value to be searched or
+                          //    inserted         
         checkFramPosition();
+        
+        if (e.getSource() == insertToHeap)
+        {
+            try               // Try to insert a value as long as the user inputs a number
+            {
+                targetValue = Integer.parseInt(valueToInsert.getText());
+                theMinHeap.addValue(targetValue);
+                enableDelete = true;    //Whenever we add a value, enable the delete
+                                        //   button
+                
+                currFrame = 0;          //Reset the current frame
+            }
+            
+            catch(Exception ex)// On failure, prompt the user to type in a value
+            {
+                JOptionPane.showMessageDialog(null, "Please enter a value to Insert.");                
+            }
+
+           
+        }
         
         if (e.getSource() == searchValue)
         {
@@ -490,39 +510,23 @@ public class Gui extends JApplet implements ActionListener, ItemListener
             
         }
         
-        if (e.getSource() == deleteValue)				//when user presses delete root button 
-        {
-            
-            theMinHeap.removeRoot();                    
-            currFrame = 0;                              //Reset the current frame
-            
-            numFrames = theMinHeap.getStateIndex();
-            
-            if (animateFrames[numFrames-1].length == 0) //If there are no nodes to 
-            {
-                enableDelete = false;                   //Do not allow delete to be enables
-                deleteValue.setEnabled(false);          //Disable delete
-            }
-            
-        }
-        
-        if (e.getSource() == heapify)					//when user presses heapify button
+        if (e.getSource() == nextStep)
         {
             currFrame++;
             checkFramPosition();
         }
         
-        if (e.getSource() == unHeapify)					//when user presses unHeapify root button
+        if (e.getSource() == prevStep)
         {
-            currFrame--;           						//   decrement.
+            currFrame--;           //   decrement.
             
-            if (currFrame == -1)       			 // If the current frame is not at the first frame.
+            if (currFrame == -1)        // If the current frame is not at the first frame.
                 currFrame = 0;
             
             checkFramPosition();
         }
         
-        if (e.getSource() == fullHeapify)				//when user presses Full Heapify button
+        if (e.getSource() == lastFrame)
         {
             currFrame = numFrames - 1;
             checkFramPosition();
