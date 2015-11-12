@@ -56,7 +56,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     
     private ScaledPoint scaler;       // scaler is a scalepoint class that will return
                                       //    the exact location for GUI Elements
-    //  Right Side
+    // Right Side
     private JTextArea feedContents;       // feedContents holds content for news feed.       
     private JScrollPane feedPane;         // feedPane holds feedContents for news feed.    
     private String feedMessage;           // feedMessage holds message for news feed.        
@@ -408,7 +408,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
             enableAll();                 // enable all the buttons 
             nextStep.setEnabled(false);  // disable the forward button
             lastFrame.setEnabled(false); // disable the fast forward button
-            prevStep.setEnabled(false);   // enable all the move back button
+            prevStep.setEnabled(false);  // enable all the move back button
         }
         
         else if(currFrame == (numFrames - 1) )   // If the current frame is at last frame
@@ -434,7 +434,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
             disableAll();
             nextStep.setEnabled(true);  //disable the forward button
             lastFrame.setEnabled(true); //disable the fast forward button
-            prevStep.setEnabled(true);   //enable all the move back button
+            prevStep.setEnabled(true);  //enable all the move back button
         }
     }
     
@@ -448,8 +448,8 @@ public class Gui extends JApplet implements ActionListener, ItemListener
     public void actionPerformed(ActionEvent e) 
     // POST: Handles all actions performed on the GUI
     {
-        int targetValue;  // target value holds the value to be searched or
-                          //    inserted         
+        int targetValue;  			// target value holds the value to be searched or
+                          			//    inserted         
         checkFramPosition();
         
         if (e.getSource() == insertToHeap)
@@ -460,7 +460,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
             enableDelete = true;    //Whenever we add a value, enable the delete
                                     //   button
             
-            currFrame = 0;                              //Reset the current frame
+            currFrame = 0;          //Reset the current frame
         }
         
         if (e.getSource() == searchValue)
@@ -485,7 +485,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
             
             numFrames = theMinHeap.getStateIndex();
             
-            if (animateFrames[numFrames-1].length == 0)   //If there are no nodes to 
+            if (animateFrames[numFrames-1].length == 0) //If there are no nodes to 
             {
                 enableDelete = false;                   //Do not allow delete to be enables
                 deleteValue.setEnabled(false);          //Disable delete
@@ -501,7 +501,7 @@ public class Gui extends JApplet implements ActionListener, ItemListener
         
         if (e.getSource() == prevStep)
         {
-            currFrame--;           //   decrement.
+            currFrame--;           		//   decrement.
             
             if (currFrame == -1)        // If the current frame is not at the first frame.
                 currFrame = 0;
